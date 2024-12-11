@@ -1,12 +1,27 @@
+<?php
+    session_start();
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit();
+    }
+
+
+    // session_start();
+    // if (!isset($_SESSION['user_id'])) {
+    //     header('Location: login.php');
+    //     exit;
+    // }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS System Dashboard</title>
+    <title>Sales HP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
+<a href="logout.php" class="btn btn-primary">Logout</a>
     <div class="container mt-5">
         <h1 class="text-center">POS System Dashboard</h1>
         <div class="row mt-4">
