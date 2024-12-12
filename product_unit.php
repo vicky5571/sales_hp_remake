@@ -1,5 +1,10 @@
 <?php 
 include 'conn.php';
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
 // Fetch data for dropdowns
 $productsQuery = "SELECT PRODUCT_ID, PRODUCT_NAME, QUANTITY FROM PRODUCTS";

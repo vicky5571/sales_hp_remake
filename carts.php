@@ -2,6 +2,11 @@
 include 'conn.php';
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $user_id = $_SESSION['user_id']; // Assuming user session is active
 
 // Get the current cart for the user

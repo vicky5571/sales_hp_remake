@@ -1,5 +1,10 @@
 <?php
 include 'conn.php'; // Connection to the database
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
 // Fetch categories from the database
 $query = "SELECT * FROM CATEGORIES";

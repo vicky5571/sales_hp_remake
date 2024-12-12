@@ -1,6 +1,11 @@
 <?php
 // Include the database connection
 include 'conn.php';
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
 // Fetch products from the database
 $productsQuery = "SELECT p.PRODUCT_ID, p.PRODUCT_NAME, p.COLOR, p.QUANTITY, c.CATEGORY_NAME 
