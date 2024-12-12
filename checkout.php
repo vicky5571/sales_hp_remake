@@ -1,6 +1,7 @@
 <?php
 include 'conn.php';
 session_start();
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -8,44 +9,35 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Get the cart ID
-$cart_query = "SELECT cart_id FROM carts WHERE user_id = $user_id";
-$cart_result = $mysqli->query($cart_query);
+// Get the user's cart
+$cart_query = "SELECT cart_id, quantity FROM carts WHERE user_id = $user_id";
+$cart_result = $conn->query($cart_query);
+$cart = $cart_result->fetch_assoc();
 
-if ($cart_result->num_rows > 0) {
-    $cart = $cart_result->fetch_assoc();
+if ($cart) {
     $cart_id = $cart['cart_id'];
+    $quantity = $cart['quantity'];
 
-    // Calculate totals
-    $total_units_query = "SELECT COUNT(*) as total_units FROM cart_items WHERE cart_id = $cart_id";
-    $total_units_result = $mysqli->query($total_units_query);
-    $total_units = $total_units_result->fetch_assoc()['total_units'];
+    // Calculate total price
+    $total_query = "SELECT SUM(ci.sold_price) AS grand_total 
+                    FROM cart_items ci 
+                    WHERE ci.cart_id = $cart_id";
+    $total_result = $conn->query($total_query);
+    $grand_total = $total_result->fetch_assoc()['grand_total'];
 
-    $grand_total_query = "SELECT SUM(pu.srp) as grand_total
-                          FROM cart_items ci
-                          JOIN product_unit pu ON ci.imei = pu.imei
-                          WHERE ci.cart_id = $cart_id";
-    $grand_total_result = $mysqli->query($grand_total_query);
-    $grand_total = $grand_total_result->fetch_assoc()['grand_total'];
+    // Insert into transactions
+    $shipping_address = "Default Address"; // Replace with dynamic input
+    $buyer_name = $_SESSION['first_name'] . " " . $_SESSION['last_name']; // Replace as needed
+    $conn->query("INSERT INTO transactions 
+                  (cart_id, transaction_status, shipping_address, total_unit, grand_total, buyer_name, created_at) 
+                  VALUES ($cart_id, 'Completed', '$shipping_address', $quantity, $grand_total, '$buyer_name', NOW())");
 
-    // Insert transaction
-    $transaction_status = 'Pending';
-    $shipping_address = 'Default Address'; // Replace with user input
-    $buyer_name = 'Default Buyer'; // Replace with user input
-    $created_at = date('Y-m-d H:i:s');
+    // Clear the cart
+    $conn->query("DELETE FROM cart_items WHERE cart_id = $cart_id");
+    $conn->query("UPDATE carts SET quantity = 0 WHERE cart_id = $cart_id");
 
-    $transaction_query = "INSERT INTO transactions 
-                          (cart_id, transaction_status, shipping_address, total_unit, grand_total, buyer_name, created_at) 
-                          VALUES ($cart_id, '$transaction_status', '$shipping_address', $total_units, $grand_total, '$buyer_name', '$created_at')";
-    if ($mysqli->query($transaction_query)) {
-        // Empty the cart
-        $mysqli->query("DELETE FROM cart_items WHERE cart_id = $cart_id");
-
-        echo "<script>alert('Checkout successful!'); window.location.href='transactions.php';</script>";
-    } else {
-        echo "Error during checkout: " . $mysqli->error;
-    }
+    echo "Transaction completed! Total: $grand_total";
 } else {
-    echo "Cart not found!";
+    echo "No active cart.";
 }
 ?>

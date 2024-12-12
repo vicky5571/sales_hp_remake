@@ -1,34 +1,32 @@
 <?php
 include 'conn.php';
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $imei = $_POST['imei'];
-    $user_id = $_SESSION['user_id']; // Assuming user session is active
+    $imei = $conn->real_escape_string($_POST['imei']);
+    $sold_price = $conn->real_escape_string($_POST['sold_price']);
+    $user_id = $_SESSION['user_id'];
 
-    // Get user's current cart or create a new one
+    // Check for an existing cart
     $cart_query = "SELECT cart_id FROM carts WHERE user_id = $user_id";
-    $cart_result = $mysqli->query($cart_query);
+    $cart_result = $conn->query($cart_query);
 
     if ($cart_result->num_rows > 0) {
-        $cart = $cart_result->fetch_assoc();
-        $cart_id = $cart['cart_id'];
+        $cart_id = $cart_result->fetch_assoc()['cart_id'];
     } else {
-        $mysqli->query("INSERT INTO carts (user_id) VALUES ($user_id)");
-        $cart_id = $mysqli->insert_id;
+        // Create a new cart
+        $conn->query("INSERT INTO carts (user_id, quantity) VALUES ($user_id, 0)");
+        $cart_id = $conn->insert_id;
     }
 
-    // Add the product unit to cart_items
-    $cart_item_query = "INSERT INTO cart_items (cart_id, product_id) 
-                        SELECT $cart_id, product_id FROM product_unit WHERE imei = '$imei'";
-    if ($mysqli->query($cart_item_query)) {
-        echo "Product added to cart!";
-    } else {
-        echo "Error adding to cart: " . $mysqli->error;
-    }
+    // Add the item to cart_items
+    $conn->query("INSERT INTO cart_items (cart_id, sold_price, imei) 
+                  VALUES ($cart_id, $sold_price, '$imei')");
+
+    // Update the quantity in carts
+    $conn->query("UPDATE carts SET quantity = quantity + 1 WHERE cart_id = $cart_id");
+
+    header("Location: carts.php");
+    exit();
 }
 ?>
