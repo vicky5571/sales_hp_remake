@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <h1>Products</h1>
+    <a href="index.php">Home</a>
 
     <!-- Display Products Table -->
     <table border="1" cellpadding="10" cellspacing="0">

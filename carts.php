@@ -36,6 +36,7 @@ if ($cart_result->num_rows > 0) {
 </head>
 <body>
     <h1>Your Cart</h1>
+    <a href="index.php">Home</a>
 
     <?php if ($cart_items_result->num_rows > 0) : ?>
         <table border="1" cellpadding="10" cellspacing="0">

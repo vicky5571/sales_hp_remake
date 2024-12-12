@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <h1>Suppliers</h1>
+    <a href="index.php">Home</a>
 
     <!-- Display Suppliers Table -->
     <table border="1" cellpadding="10" cellspacing="0">

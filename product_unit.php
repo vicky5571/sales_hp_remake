@@ -88,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_to_cart'])) {
 
 <body>
     <h1>Product Units</h1>
+    <a href="index.php">Home</a>
 
     <!-- Display Product Units Table -->
     <table border="1" cellpadding="10" cellspacing="0">

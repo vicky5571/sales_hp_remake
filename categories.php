@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Categories</h1>
+        <a href="index.php">Home</a>
         <div class="mt-4">
             <!-- Add New Category Form -->
             <form method="POST" class="d-flex mb-4">
