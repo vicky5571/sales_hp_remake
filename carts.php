@@ -1,4 +1,4 @@
-<?php 
+<?php
 include 'conn.php';
 session_start();
 
@@ -7,36 +7,14 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$cartId = $_SESSION['cart_id'] ?? 1;
-
-// Handle item removal
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
-    $imeiToRemove = $_POST['remove_item'];
-    
-    // Remove the item from CART_ITEMS
-    $removeQuery = "DELETE FROM CART_ITEMS WHERE IMEI = '$imeiToRemove' AND CART_ID = '$cartId'";
-    $conn->query($removeQuery);
-    
-    // Set `added_to_cart` to false in PRODUCT_UNIT
-    $updateProductQuery = "UPDATE PRODUCT_UNIT SET added_to_cart = 0 WHERE IMEI = '$imeiToRemove'";
-    $conn->query($updateProductQuery);
-    
-    // Update the cart quantity
-    $updateCartQuery = "UPDATE CARTS 
-                        SET QUANTITY = (SELECT COUNT(*) FROM CART_ITEMS WHERE CART_ID = '$cartId') 
-                        WHERE CART_ID = '$cartId'";
-    $conn->query($updateCartQuery);
-    
-    // Redirect to avoid resubmission on refresh
-    header("Location: carts.php");
-    exit();
-}
+$user_id = $_SESSION['user_id'];
+$cart_id = $_SESSION['cart_id'];
 
 // Fetch cart items
-$cartItemsQuery = "SELECT ci.IMEI, pu.PRODUCT_UNIT_DESCRIPTION, pu.BUY_PRICE, pu.SRP 
-                   FROM CART_ITEMS ci 
-                   JOIN PRODUCT_UNIT pu ON ci.IMEI = pu.IMEI 
-                   WHERE ci.CART_ID = '$cartId'";
+$cartItemsQuery = "SELECT ci.cart_item_id, ci.sold_price, ci.IMEI, pu.PRODUCT_UNIT_DESCRIPTION, pu.BUY_PRICE, pu.SRP 
+                   FROM cart_items ci
+                   JOIN product_unit pu ON ci.IMEI = pu.IMEI
+                   WHERE ci.cart_id = '$cart_id'";
 $cartItemsResult = $conn->query($cartItemsQuery);
 
 // Calculate total price
@@ -46,18 +24,15 @@ while ($item = $cartItemsResult->fetch_assoc()) {
     $cartItems[] = $item;
     $totalPrice += $item['SRP'];
 }
-?>
 
+// Update quantity dynamically
+$updateQuantityQuery = "UPDATE carts SET quantity = " . count($cartItems) . " WHERE cart_id = '$cart_id'";
+$conn->query($updateQuantityQuery);
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Cart</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .button { padding: 6px 12px; background-color: red; color: white; border: none; cursor: pointer; }
-    </style>
 </head>
 <body>
     <h1>Your Cart</h1>
@@ -72,27 +47,25 @@ while ($item = $cartItemsResult->fetch_assoc()) {
             </tr>
         </thead>
         <tbody>
-            <?php if (count($cartItems) > 0): ?>
-                <?php foreach ($cartItems as $item): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($item['IMEI']); ?></td>
-                        <td><?= htmlspecialchars($item['PRODUCT_UNIT_DESCRIPTION']); ?></td>
-                        <td><?= htmlspecialchars($item['BUY_PRICE']); ?></td>
-                        <td><?= htmlspecialchars($item['SRP']); ?></td>
-                        <td>
-                            <form method="POST" style="display:inline;">
-                                <button type="submit" class="button" name="remove_item" value="<?= htmlspecialchars($item['IMEI']); ?>">Remove</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+            <?php foreach ($cartItems as $item): ?>
                 <tr>
-                    <td colspan="5">Your cart is empty.</td>
+                    <td><?= $item['IMEI'] ?></td>
+                    <td><?= $item['PRODUCT_UNIT_DESCRIPTION'] ?></td>
+                    <td><?= $item['BUY_PRICE'] ?></td>
+                    <td><?= $item['SRP'] ?></td>
+                    <td><?= $item['sold_price']; ?></td>
+                    <td>
+                        <form method="POST" action="remove_cart_item.php">
+                            <input type="hidden" name="cart_item_id" value="<?= $item['cart_item_id'] ?>">
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
                 </tr>
-            <?php endif; ?>
+            <?php endforeach; ?>
         </tbody>
     </table>
-    <p><strong>Total Price:</strong> <?= $totalPrice; ?></p>
+    <p>Total Items: <?= count($cartItems) ?></p>
+    <p>Total Price: <?= $totalPrice ?></p>
+    <a href="checkout.php">Checkout</a>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 
 // Redirect if already logged in
@@ -31,6 +31,25 @@ if (isset($_POST['login'])) {
             $_SESSION['email'] = $user_data['EMAIL'];
             $_SESSION['user_role'] = $user_data['USER_ROLE'];
 
+            $user_id = $user_data['USER_ID'];
+
+            // Check if user already has an active cart
+            $cart_query = "SELECT * FROM carts WHERE user_id = '$user_id' ORDER BY cart_id DESC LIMIT 1";
+            $cart_result = $conn->query($cart_query);
+
+            if ($cart_result->num_rows === 0) {
+                // Create a new cart for the user
+                $create_cart_query = "INSERT INTO carts (user_id, quantity) VALUES ('$user_id', 0)";
+                $conn->query($create_cart_query);
+
+                // Store the new cart_id in the session
+                $_SESSION['cart_id'] = $conn->insert_id;
+            } else {
+                // Use the existing cart
+                $cart = $cart_result->fetch_assoc();
+                $_SESSION['cart_id'] = $cart['cart_id'];
+            }
+
             // Redirect to index.php
             header("Location: index.php");
             exit();
@@ -42,7 +61,6 @@ if (isset($_POST['login'])) {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html>

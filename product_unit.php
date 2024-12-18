@@ -123,9 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_to_cart'])) {
                     <td><?= $productUnit['ADDED_TO_CART'] ? 'Yes' : 'No'; ?></td>
                     <td>
                         <?php if (!$productUnit['ADDED_TO_CART']) : ?>
-                            <form method="POST" action="">
-                                <input type="hidden" name="imei" value="<?= $productUnit['IMEI']; ?>">
-                                <button type="submit" name="add_to_cart">Add to Cart</button>
+                            <form action="add_to_cart.php" method="post">
+                                <input type="hidden" name="imei" value="<?= htmlspecialchars($productUnit['IMEI']); ?>">
+                                <input type="hidden" name="sold_price" value="<?= htmlspecialchars($productUnit['SRP']); ?>">
+                                <button type="submit">Add to Cart</button>
                             </form>
                         <?php else : ?>
                             <span>Already in Cart</span>
