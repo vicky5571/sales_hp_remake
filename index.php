@@ -67,7 +67,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Carts</h5>
                         <p class="card-text">hehehe</p>
-                        <a href="carts.php" class="btn btn-primary">Go to Product Unit</a>
+                        <a href="carts.php" class="btn btn-primary">Go to Carts</a>
                     </div>
                 </div>
             </div>
