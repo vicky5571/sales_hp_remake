@@ -1,101 +1,70 @@
 <?php
-include 'conn.php';
+// Include database connection
+require_once 'conn.php';
+
+// Start session (assuming you're using sessions for user tracking)
 session_start();
 
+// Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
+    die("User not logged in.");
 }
 
+// Fetch user ID and cart ID from session
 $user_id = $_SESSION['user_id'];
 $cart_id = $_SESSION['cart_id'];
 
-// Fetch cart details
-$cartQuery = "SELECT ci.cart_item_id, ci.sold_price, ci.IMEI, pu.SRP 
+// Fetch cart items for the user
+$cartQuery = "SELECT ci.cart_item_id, ci.cart_id, ci.sold_price, ci.imei, pu.SRP, pu.sold 
               FROM cart_items ci
-              JOIN product_unit pu ON ci.IMEI = pu.IMEI
-              WHERE ci.cart_id = '$cart_id'";
-$cartResult = $conn->query($cartQuery);
+              JOIN product_unit pu ON ci.imei = pu.imei
+              WHERE ci.cart_id = ?";
+$stmt = $conn->prepare($cartQuery);
+$stmt->bind_param("i", $cart_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$cartItems = $result->fetch_all(MYSQLI_ASSOC);
 
-// Initialize variables
-$totalPrice = 0;
-$totalItems = 0;
-$cartItems = [];
-
-// Gather cart data
-while ($item = $cartResult->fetch_assoc()) {
-    $cartItems[] = $item;
-    $totalPrice += $item['SRP'];
-    $totalItems++;
+if (empty($cartItems)) {
+    die("Cart is empty.");
 }
 
-// Handle checkout process
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['checkout'])) {
-    $buyerName = $conn->real_escape_string($_POST['buyer_name']);
-    $shippingAddress = $conn->real_escape_string($_POST['shipping_address']);
-    $transactionStatus = "Completed"; // Default status
-
-    $conn->begin_transaction();
-
-    try {
-        // Insert into transactions table
-        $insertTransaction = "INSERT INTO transactions 
-                              (cart_id, transaction_status, shipping_address, total_unit, grand_total, buyer_name, created_at) 
-                              VALUES 
-                              ('$cart_id', '$transactionStatus', '$shippingAddress', '$totalItems', '$totalPrice', '$buyerName', NOW())";
-        $conn->query($insertTransaction);
-
-        // Get the transaction ID
-        $transactionId = $conn->insert_id;
-
-        // Mark cart as cleared
-        $clearCartItems = "DELETE FROM cart_items WHERE cart_id = '$cart_id'";
-        $conn->query($clearCartItems);
-
-        // Reset product_unit `added_to_cart`
-        foreach ($cartItems as $item) {
-            $imei = $item['IMEI'];
-            $resetAddedToCart = "UPDATE product_unit SET added_to_cart = FALSE WHERE imei = '$imei'";
-            $conn->query($resetAddedToCart);
-        }
-
-        // Update cart quantity to zero
-        $resetCartQuantity = "UPDATE carts SET quantity = 0 WHERE cart_id = '$cart_id'";
-        $conn->query($resetCartQuantity);
-
-        $conn->commit();
-
-        echo "<script>alert('Checkout successful! Transaction ID: $transactionId'); window.location.href = 'product_unit.php';</script>";
-    } catch (Exception $e) {
-        $conn->rollback();
-        echo "<script>alert('Error during checkout: " . $e->getMessage() . "');</script>";
+// Verify none of the products are already sold
+foreach ($cartItems as $item) {
+    if ($item['sold'] === 'yes') {
+        die("Some items in your cart are already sold.");
     }
 }
+
+// Calculate transaction details
+$shipping_address = "123 Example St, City"; // Example address, replace with input
+$buyer_name = "John Doe"; // Example name, replace with input
+$total_unit = count($cartItems);
+$grand_total = array_sum(array_column($cartItems, 'sold_price'));
+
+// Insert transaction details
+$transactionQuery = "INSERT INTO transactions (user_id, cart_id, transaction_status, shipping_address, total_unit, grand_total, buyer_name, created_at)
+                     VALUES (?, ?, 'Pending', ?, ?, ?, ?, NOW())";
+$stmt = $conn->prepare($transactionQuery);
+$stmt->bind_param("iissds", $user_id, $cart_id, $shipping_address, $total_unit, $grand_total, $buyer_name);
+$stmt->execute();
+$transaction_id = $stmt->insert_id;
+
+// Update product `sold` status and clear cart items
+foreach ($cartItems as $item) {
+    // Update product status to sold
+    $updateSoldQuery = "UPDATE product_unit SET sold = 'yes' WHERE imei = ?";
+    $stmt = $conn->prepare($updateSoldQuery);
+    $stmt->bind_param("s", $item['imei']);
+    $stmt->execute();
+
+    // Remove the cart item
+    $deleteCartQuery = "DELETE FROM cart_items WHERE cart_item_id = ?";
+    $stmt = $conn->prepare($deleteCartQuery);
+    $stmt->bind_param("i", $item['cart_item_id']);
+    $stmt->execute();
+}
+
+// Redirect to a success page or display confirmation
+echo "Checkout successful! Your transaction ID is " . $transaction_id;
 ?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-</head>
-
-<body>
-    <h1>Checkout</h1>
-    <form method="POST" action="">
-        <label for="buyer_name">Buyer Name:</label>
-        <input type="text" name="buyer_name" id="buyer_name" required>
-        <br><br>
-
-        <label for="shipping_address">Shipping Address:</label>
-        <textarea name="shipping_address" id="shipping_address" required></textarea>
-        <br><br>
-
-        <p>Total Items: <?= $totalItems ?></p>
-        <p>Total Price: <?= $totalPrice ?></p>
-        <button type="submit" name="checkout">Confirm Checkout</button>
-    </form>
-</body>
-
-</html>
