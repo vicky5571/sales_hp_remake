@@ -76,7 +76,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Transactions</h5>
                         <!-- <p class="card-text"></p> -->
-                        <a href="carts.php" class="btn btn-primary">Go to Transactions</a>
+                        <a href="transactions.php" class="btn btn-primary">Go to Transactions</a>
                     </div>
                 </div>
             </div>
