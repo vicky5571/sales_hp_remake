@@ -15,7 +15,7 @@ $user_id = $_SESSION['user_id'];
 $cart_id = $_SESSION['cart_id'];
 
 // Fetch cart items for the user
-$cartQuery = "SELECT ci.cart_item_id, ci.cart_id, ci.sold_price, ci.imei, pu.SRP, pu.sold 
+$cartQuery = "SELECT ci.cart_item_id, ci.cart_id, ci.sold_price, ci.imei, pu.sold 
               FROM cart_items ci
               JOIN product_unit pu ON ci.imei = pu.imei
               WHERE ci.cart_id = ?";
@@ -50,8 +50,15 @@ $stmt->bind_param("iissds", $user_id, $cart_id, $shipping_address, $total_unit, 
 $stmt->execute();
 $transaction_id = $stmt->insert_id;
 
-// Update product `sold` status and clear cart items
+// Move cart items to transaction_items and clear cart items
 foreach ($cartItems as $item) {
+    // Insert into transaction_items
+    $insertTransactionItemQuery = "INSERT INTO transaction_items (cart_id, sold_price, imei) 
+                                    VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($insertTransactionItemQuery);
+    $stmt->bind_param("ids", $item['cart_id'], $item['sold_price'], $item['imei']);
+    $stmt->execute();
+
     // Update product status to sold
     $updateSoldQuery = "UPDATE product_unit SET sold = 'yes' WHERE imei = ?";
     $stmt = $conn->prepare($updateSoldQuery);

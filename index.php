@@ -71,6 +71,15 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Transactions</h5>
+                        <!-- <p class="card-text"></p> -->
+                        <a href="carts.php" class="btn btn-primary">Go to Transactions</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
