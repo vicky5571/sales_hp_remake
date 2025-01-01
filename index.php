@@ -1,27 +1,29 @@
 <?php
-    session_start();
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: login.php");
-        exit();
-    }
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
 
-    // session_start();
-    // if (!isset($_SESSION['user_id'])) {
-    //     header('Location: login.php');
-    //     exit;
-    // }
+// session_start();
+// if (!isset($_SESSION['user_id'])) {
+//     header('Location: login.php');
+//     exit;
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales HP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
+
 <body>
-<a href="logout.php" class="btn btn-primary">Logout</a>
+    <a href="logout.php" class="btn btn-primary">Logout</a>
     <div class="container mt-5">
         <h1 class="text-center">POS System Dashboard</h1>
         <div class="row mt-4">
@@ -80,7 +82,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Users</h5>
+                        <!-- <p class="card-text"></p> -->
+                        <a href="users.php" class="btn btn-primary">Go to Users</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+
 </html>
