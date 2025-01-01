@@ -36,6 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $update_cart_query = "UPDATE carts SET quantity = quantity + 1 WHERE cart_id = '$cart_id'";
             $conn->query($update_cart_query);
 
+            // Update ADDED_TO_CART to 1
+            $update_product_unit_query = "UPDATE product_unit SET ADDED_TO_CART = 1 WHERE IMEI = '$imei'";
+            $conn->query($update_product_unit_query);
+
             echo "Item added to cart successfully!";
         } else {
             die("Error adding item to cart: " . $conn->error);
@@ -44,4 +48,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "Invalid request method.";
 }
-?>

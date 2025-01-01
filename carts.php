@@ -31,9 +31,11 @@ $conn->query($updateQuantityQuery);
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Cart</title>
 </head>
+
 <body>
     <h1>Your Cart</h1>
     <table>
@@ -43,6 +45,7 @@ $conn->query($updateQuantityQuery);
                 <th>Description</th>
                 <th>Buy Price</th>
                 <th>SRP</th>
+                <th>Sold Price</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -68,4 +71,5 @@ $conn->query($updateQuantityQuery);
     <p>Total Price: <?= $totalPrice ?></p>
     <a href="checkout.php">Checkout</a>
 </body>
+
 </html>
