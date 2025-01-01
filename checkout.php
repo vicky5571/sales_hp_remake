@@ -2,12 +2,12 @@
 // Include database connection
 require_once 'conn.php';
 
-// Start session (assuming you're using sessions for user tracking)
 session_start();
 
 // Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    die("User not logged in.");
+    header("Location: login.php");
+    exit();
 }
 
 // Fetch user ID and cart ID from session
@@ -26,13 +26,15 @@ $result = $stmt->get_result();
 $cartItems = $result->fetch_all(MYSQLI_ASSOC);
 
 if (empty($cartItems)) {
-    die("Cart is empty.");
+    echo "<script>alert('Cart is empty.'); window.location.href='carts.php';</script>";
+    exit();
 }
 
 // Verify none of the products are already sold
 foreach ($cartItems as $item) {
     if ($item['sold'] === 'yes') {
-        die("Some items in your cart are already sold.");
+        echo "<script>alert('Some items in your cart are already sold.'); window.location.href='carts.php';</script>";
+        exit();
     }
 }
 
@@ -50,7 +52,7 @@ $stmt->bind_param("iissds", $user_id, $cart_id, $shipping_address, $total_unit, 
 $stmt->execute();
 $transaction_id = $stmt->insert_id;
 
-// Move cart items to transaction_items and clear cart items
+// Move cart items to transaction_items and update product_unit
 foreach ($cartItems as $item) {
     // Insert into transaction_items
     $insertTransactionItemQuery = "INSERT INTO transaction_items (cart_id, sold_price, imei) 
@@ -59,9 +61,9 @@ foreach ($cartItems as $item) {
     $stmt->bind_param("ids", $item['cart_id'], $item['sold_price'], $item['imei']);
     $stmt->execute();
 
-    // Update product status to sold
-    $updateSoldQuery = "UPDATE product_unit SET sold = 'yes' WHERE imei = ?";
-    $stmt = $conn->prepare($updateSoldQuery);
+    // Update product status to sold and reset ADDED_TO_CART
+    $updateProductQuery = "UPDATE product_unit SET SOLD = 1, ADDED_TO_CART = 0 WHERE IMEI = ?";
+    $stmt = $conn->prepare($updateProductQuery);
     $stmt->bind_param("s", $item['imei']);
     $stmt->execute();
 
@@ -72,6 +74,11 @@ foreach ($cartItems as $item) {
     $stmt->execute();
 }
 
-// Redirect to a success page or display confirmation
-echo "Checkout successful! Your transaction ID is " . $transaction_id;
-?>
+// Clear cart quantity after checkout
+$updateCartQuery = "UPDATE carts SET QUANTITY = 0 WHERE CART_ID = ?";
+$stmt = $conn->prepare($updateCartQuery);
+$stmt->bind_param("i", $cart_id);
+$stmt->execute();
+
+// Redirect to a success page
+echo "<script>alert('Checkout successful! Your transaction ID is $transaction_id'); window.location.href='success_page.php';</script>";
