@@ -20,12 +20,17 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales HP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="src/tiles.css" />
+
 </head>
 
 <body>
-    <a href="logout.php" class="btn btn-primary">Logout</a>
+    <div id="container">
+        <div class="tile"></div>
+    </div>
     <div class="container mt-5">
-        <h1 class="text-center">POS System Dashboard</h1>
+        <h1 class="text-center text-light">POS System Dashboard</h1>
+        <a href="logout.php" class="btn btn-primary">Logout</a>
         <div class="row mt-4">
             <!-- Card -->
             <div class="col-md-4">
@@ -93,6 +98,10 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
     </div>
+
+    <!-- partial -->
+    <script src="https://codepen.io/Hyperplexed/pen/xxYJYjM/54407644e24173ad6019b766443bf2a6.js"></script>
+    <script src="src/tiles.js"></script>
 </body>
 
 </html>
