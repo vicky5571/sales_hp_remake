@@ -33,53 +33,121 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suppliers</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <h1>Suppliers</h1>
-    <a href="index.php">Home</a>
+    <div class="container-fluid">
+        <h1 class="my-3">Suppliers</h1>
+        <a href="index.php" class="btn btn-primary mb-3">Home</a>
 
-    <!-- Display Suppliers Table -->
-    <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Supplier ID</th>
-                <th>Supplier Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($supplier = $suppliersResult->fetch_assoc()) : ?>
-                <tr>
-                    <td><?= $supplier['SUPPLIER_ID']; ?></td>
-                    <td><?= $supplier['SUPPLIER_NAME']; ?></td>
-                    <td><?= $supplier['EMAIL']; ?></td>
-                    <td><?= $supplier['PHONE']; ?></td>
-                </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
+        <!-- Add Supplier Form -->
+        <div class="sticky-top bg-light p-3 border rounded mb-3">
+            <h2>Add Supplier</h2>
+            <form method="POST" action="">
+                <div class="mb-3">
+                    <label for="supplier_name" class="form-label">Supplier Name</label>
+                    <input type="text" class="form-control" name="supplier_name" id="supplier_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" name="phone" id="phone" required>
+                </div>
+                <button type="submit" class="btn btn-success">Add Supplier</button>
+            </form>
+        </div>
 
-    <hr>
+        <!-- Display Suppliers Table -->
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Supplier ID</th>
+                        <th>Supplier Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($supplier = $suppliersResult->fetch_assoc()) : ?>
+                        <tr>
+                            <td><?= $supplier['SUPPLIER_ID']; ?></td>
+                            <td><?= $supplier['SUPPLIER_NAME']; ?></td>
+                            <td><?= $supplier['EMAIL']; ?></td>
+                            <td><?= $supplier['PHONE']; ?></td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
+                                    data-id="<?= $supplier['SUPPLIER_ID']; ?>"
+                                    data-name="<?= $supplier['SUPPLIER_NAME']; ?>"
+                                    data-email="<?= $supplier['EMAIL']; ?>"
+                                    data-phone="<?= $supplier['PHONE']; ?>">Edit</button>
+                                <a href="delete_suppliers.php?id=<?= $supplier['SUPPLIER_ID']; ?>"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this supplier?');">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <!-- Add Supplier Form -->
-    <h2>Add Supplier</h2>
-    <form method="POST" action="">
-        <label for="supplier_name">Supplier Name:</label>
-        <input type="text" name="supplier_name" id="supplier_name" required>
-        <br><br>
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST" action="edit_suppliers.php">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Supplier</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="supplier_id" id="editSupplierId">
+                        <div class="mb-3">
+                            <label for="editSupplierName" class="form-label">Supplier Name</label>
+                            <input type="text" class="form-control" name="supplier_name" id="editSupplierName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" id="editEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Phone</label>
+                            <input type="text" class="form-control" name="phone" id="editPhone" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
-        <br><br>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Fill modal with data for editing
+        document.getElementById('editModal').addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const name = button.getAttribute('data-name');
+            const email = button.getAttribute('data-email');
+            const phone = button.getAttribute('data-phone');
 
-        <label for="phone">Phone:</label>
-        <input type="text" name="phone" id="phone" required>
-        <br><br>
-
-        <button type="submit">Add Supplier</button>
-    </form>
+            document.getElementById('editSupplierId').value = id;
+            document.getElementById('editSupplierName').value = name;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editPhone').value = phone;
+        });
+    </script>
 </body>
 
 </html>
