@@ -4,23 +4,29 @@
       maka berikan position relative pada box ini 
     */
   position: relative;
-  background-color: #212529;
+  background-color: #23272e; /* 212529 */
   border-radius: 10px;
-  height: 200px;
+  height: 300px;
   transform-style: preserve-3d;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.card-title {
+  display: none;
 }
 
 .project-tilt-box::before {
-  content: "CATEGORIES";
+  content: attr(data-title);
   position: absolute;
   color: #f8f9fa;
-  font-size: 4em;
+  font-size: 3em;
   font-weight: bold;
   font-style: italic;
-  top: 30px;
+  /* top: 30px; */
   left: 50%;
   transform: translate(-50%, 0);
-  opacity: 0.2;
+  opacity: 0.4;
   transition: 0.5s;
 }
 
@@ -85,8 +91,12 @@
   transform: translate3d(-50%, -50%, 100px);
   max-width: 100px;
   transition: 0.5s;
+  opacity: 0; /* Initially hidden */
+  visibility: hidden; /* Prevent interaction when hidden */
 }
 
 .project-tilt-box:hover .project-img {
   transform: translate3d(-50%, -52%, 100px) rotate(5deg) scale(2.2);
+  opacity: 1; /* Fully visible on hover */
+  visibility: visible; /* Allow interaction */
 }

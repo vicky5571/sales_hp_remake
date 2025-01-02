@@ -83,6 +83,7 @@ if (isset($_POST['login'])) {
         body {
             min-height: 100vh;
             font-family: "Raleway", sans-serif;
+            background-color: rgb(30, 34, 39);
         }
 
         .container {
@@ -132,22 +133,22 @@ if (isset($_POST['login'])) {
 
         .top:before {
             transform: rotate(45deg);
-            background: #e46569;
+            background: rgb(248, 113, 113);
         }
 
         .top:after {
             transform: rotate(135deg);
-            background: #ecaf81;
+            background: rgb(56, 189, 248);
         }
 
         .bottom:before {
             transform: rotate(-45deg);
-            background: #60b8d4;
+            background: rgb(74, 222, 128);
         }
 
         .bottom:after {
             transform: rotate(-135deg);
-            background: #3745b5;
+            background: rgb(253, 224, 71);
         }
 
         .center {
@@ -157,7 +158,7 @@ if (isset($_POST['login'])) {
             top: 50%;
             left: 50%;
             margin-left: -200px;
-            margin-top: -165px;
+            margin-top: -185px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -166,7 +167,8 @@ if (isset($_POST['login'])) {
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.445, 0.05, 0, 1);
             transition-delay: 0s;
-            color: #333;
+            color: #38bdf8;
+
         }
 
         .center input {
@@ -174,7 +176,8 @@ if (isset($_POST['login'])) {
             padding: 15px;
             margin: 5px;
             border-radius: 1px;
-            border: 1px solid #ccc;
+            border: 2px solid #38bdf8;
+            /* #ccc */
             font-family: inherit;
         }
     </style>
@@ -200,9 +203,7 @@ if (isset($_POST['login'])) {
                 echo "<p style='color:red;'>$error_message</p>";
             }
             ?>
-            <ul>
-                <li><a href="register.php" class="btn btn-primary">Register</a></li>
-            </ul>
+
             <h2>&nbsp;</h2>
         </div>
     </div>

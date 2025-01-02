@@ -26,13 +26,13 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 
 <body>
+
     <div id="container">
         <div class="tile"></div>
     </div>
     <div class="container mt-5">
-        <h1 class="text-center text-light">POS System Dashboard</h1>
-        <a href="logout.php" class="btn btn-primary">Logout</a>
-        <div class="row mt-4">
+        <h1 class="text-center text-light fw-bold mb-5" style="font-size: 4em !important">POS System Dashboard</h1>
+        <div class="row mt-4 mb-4">
             <!-- Card -->
             <div class="col-md-4">
                 <a href="categories.php" class="text-decoration-none">
@@ -94,7 +94,7 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                 </a>
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <a href="users.php" class="text-decoration-none">
                     <div class="card text-center project-tilt-box">
                         <div class="card-body">
@@ -103,8 +103,9 @@ if (!isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </a>
-            </div>
+            </div> -->
         </div>
+
     </div>
 
     <!-- partial -->
@@ -120,7 +121,13 @@ if (!isset($_SESSION['user_id'])) {
             glare: true,
             scale: 1.1,
         });
+
+        document.querySelectorAll('.project-tilt-box').forEach((box) => {
+            const cardTitle = box.querySelector('.card-title').textContent;
+            box.setAttribute('data-title', cardTitle.toUpperCase());
+        });
     </script>
+
 </body>
 
 </html>
