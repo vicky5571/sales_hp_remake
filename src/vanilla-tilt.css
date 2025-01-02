@@ -1,0 +1,92 @@
+.project-tilt-box {
+  /* 
+      Karena elemen di dalamnya akan diberikan position absolute
+      maka berikan position relative pada box ini 
+    */
+  position: relative;
+  background-color: #212529;
+  border-radius: 10px;
+  height: 200px;
+  transform-style: preserve-3d;
+}
+
+.project-tilt-box::before {
+  content: "CATEGORIES";
+  position: absolute;
+  color: #f8f9fa;
+  font-size: 4em;
+  font-weight: bold;
+  font-style: italic;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  opacity: 0.2;
+  transition: 0.5s;
+}
+
+.project-tilt-box:hover::before {
+  opacity: 0.5;
+  transform: translate(-50%, 90%);
+}
+
+/* .project-tilt-box::after {
+  content: "Visualization";
+  position: absolute;
+  color: #f8f9fa;
+  font-size: 3.5em;
+  font-weight: bold;
+  font-style: italic;
+  top: 350px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.project-tilt-box:hover::after {
+  opacity: 0.2;
+} */
+
+.project-name {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  color: #f8f9fa;
+  text-align: center;
+  font-size: 2em;
+  opacity: 0;
+  transform: translate3d(0, 0, 50px);
+  transition: 0.5s;
+}
+
+.project-tilt-box:hover .project-name {
+  top: 10px;
+  opacity: 1;
+}
+
+.project-detail-button {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate3d(-50%, 0, 101px);
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.project-tilt-box:hover .project-detail-button {
+  opacity: 1;
+  bottom: 25px;
+}
+
+.project-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 100px);
+  max-width: 100px;
+  transition: 0.5s;
+}
+
+.project-tilt-box:hover .project-img {
+  transform: translate3d(-50%, -52%, 100px) rotate(5deg) scale(2.2);
+}

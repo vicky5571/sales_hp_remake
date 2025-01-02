@@ -21,6 +21,7 @@ if (!isset($_SESSION['user_id'])) {
     <title>Sales HP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="src/tiles.css" />
+    <link rel="stylesheet" href="src/vanilla-tilt.css">
 
 </head>
 
@@ -34,67 +35,74 @@ if (!isset($_SESSION['user_id'])) {
         <div class="row mt-4">
             <!-- Card -->
             <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Categories</h5>
-                        <p class="card-text">Manage categories in the system.</p>
-                        <a href="categories.php" class="btn btn-primary">Go to Categories</a>
+                <a href="categories.php" class="text-decoration-none">
+                    <div class="card text-center project-tilt-box">
+                        <div class="card-body">
+                            <h5 class="card-title">Categories</h5>
+                            <img class="project-img" src="img/category-alt.png" alt="Categories Image" />
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Products</h5>
-                        <p class="card-text">dolor amet</p>
-                        <a href="products.php" class="btn btn-primary">Go to Products</a>
+                <a href="products.php" class="text-decoration-none">
+                    <div class="card text-center project-tilt-box">
+                        <div class="card-body">
+                            <h5 class="card-title">Products</h5>
+                            <img class="project-img" src="img/products.png" alt="Products Image" />
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Suppliers</h5>
-                        <p class="card-text">iye aye</p>
-                        <a href="suppliers.php" class="btn btn-primary">Go to Suppliers</a>
+                <a href="suppliers.php" class="text-decoration-none">
+                    <div class="card text-center project-tilt-box">
+                        <div class="card-body">
+                            <h5 class="card-title">Suppliers</h5>
+                            <img class="project-img" src="img/supplier-alt.png" alt="Supplier Image" />
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Product Unit</h5>
-                        <p class="card-text">hehehe</p>
-                        <a href="product_unit.php" class="btn btn-primary">Go to Product Unit</a>
+                <a href="product_unit.php" class="text-decoration-none">
+                    <div class="card text-center project-tilt-box">
+                        <div class="card-body">
+                            <h5 class="card-title">Product Unit</h5>
+                            <img class="project-img" src="img/product-units.png" alt="Product Unit Image" />
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Carts</h5>
-                        <p class="card-text">hehehe</p>
-                        <a href="carts.php" class="btn btn-primary">Go to Carts</a>
+                <a href="carts.php" class="text-decoration-none">
+                    <div class="card text-center project-tilt-box">
+                        <div class="card-body">
+                            <h5 class="card-title">Carts</h5>
+                            <img class="project-img" src="img/carts.png" alt="Carts Image" />
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Transactions</h5>
-                        <!-- <p class="card-text"></p> -->
-                        <a href="transactions.php" class="btn btn-primary">Go to Transactions</a>
+                <a href="transactions.php" class="text-decoration-none">
+                    <div class="card text-center project-tilt-box">
+                        <div class="card-body">
+                            <h5 class="card-title">Transactions</h5>
+                            <img class="project-img" src="img/transactions.png" alt="Transactions Image" />
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Users</h5>
-                        <!-- <p class="card-text"></p> -->
-                        <a href="users.php" class="btn btn-primary">Go to Users</a>
+                <a href="users.php" class="text-decoration-none">
+                    <div class="card text-center project-tilt-box">
+                        <div class="card-body">
+                            <h5 class="card-title">Users</h5>
+                            <img class="project-img" src="img/user.png" alt="Users Image" />
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
@@ -102,6 +110,17 @@ if (!isset($_SESSION['user_id'])) {
     <!-- partial -->
     <script src="https://codepen.io/Hyperplexed/pen/xxYJYjM/54407644e24173ad6019b766443bf2a6.js"></script>
     <script src="src/tiles.js"></script>
+
+    <!-- vanilla tilt -->
+    <script type="text/javascript" src="src/vanilla-tilt.min.js"></script>
+    <script type="text/javascript">
+        VanillaTilt.init(document.querySelectorAll(".project-tilt-box"), {
+            max: 15,
+            speed: 700,
+            glare: true,
+            scale: 1.1,
+        });
+    </script>
 </body>
 
 </html>
