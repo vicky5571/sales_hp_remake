@@ -193,7 +193,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                                         <td><?= htmlspecialchars($transactionItems[$i]['product_unit_description']); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['buy_price']); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['srp']); ?></td>
-                                        <td><?= number_format($transactionItems[0]['sold_price'] - $transactionItems[0]['buy_price'], 2, '.', ','); ?></td>
+                                        <td><?= number_format($transactionItems[$i]['sold_price'] - $transactionItems[$i]['buy_price'], 2, '.', ','); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['date_stock_in']); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['supplier_name']); ?></td>
                                     </tr>
