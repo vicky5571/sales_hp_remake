@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['MANAJE
     echo '<script>alert("Access Denied! You do not have permission to access this page."); window.location.href="index.php";</script>';
 }
 
+
 // Initialize filter variables
 $startDate = '';
 $endDate = '';
@@ -19,39 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['start_date'], $_GET['en
     $endDate = $_GET['end_date'];
 
     // Fetch transactions within the selected date range
-    $transactionQuery = "SELECT 
-                            t.transactions_id AS transactions_id,
-                            t.cart_id AS cart_id,
-                            t.transaction_status AS transaction_status,
-                            t.shipping_address AS shipping_address,
-                            t.total_unit AS total_unit,
-                            t.grand_total AS grand_total,
-                            t.buyer_name AS buyer_name,
-                            t.created_at AS created_at,
-                            u.first_name AS first_name
-                        FROM transactions t 
-                        JOIN users u ON t.user_id = u.user_id
-                        WHERE t.created_at BETWEEN ? AND ? 
-                        ORDER BY t.created_at DESC
-                        ";
+    $transactionQuery = "SELECT * FROM transactions WHERE created_at BETWEEN ? AND ? ORDER BY created_at DESC";
     $stmt = $conn->prepare($transactionQuery);
     $stmt->bind_param('ss', $startDate, $endDate);
 } else {
     // Fetch all transactions if no filter is applied
-    $transactionQuery = "SELECT 
-    t.transactions_id AS transactions_id,
-    t.cart_id AS cart_id,
-    t.transaction_status AS transaction_status,
-    t.shipping_address AS shipping_address,
-    t.total_unit AS total_unit,
-    t.grand_total AS grand_total,
-    t.buyer_name AS buyer_name,
-    t.created_at AS created_at,
-    u.first_name AS first_name
-FROM transactions t 
-JOIN users u ON t.user_id = u.user_id
-ORDER BY t.created_at DESC
-";
+    $transactionQuery = "SELECT * FROM transactions ORDER BY created_at DESC";
     $stmt = $conn->prepare($transactionQuery);
 }
 
@@ -75,6 +49,8 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     </script>
 
     <link rel="stylesheet" href="./src/style.css">
+
+    <!-- Navbar -->
     <link rel="stylesheet" href="navbar/navbarStyle.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
@@ -82,6 +58,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 </head>
 
 <body>
+
     <?php include 'navbar/navbar.php'; ?>
 
     <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
@@ -104,11 +81,13 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <div class="col-md-2 d-flex align-items-end">
                     <button class="btn btn-success w-100" onclick="printPage()">Print</button>
                 </div>
+
             </div>
         </form>
 
         <?php if (!empty($transactions)): ?>
             <div class="table-responsive mt-4 bg-light">
+                <!-- style="max-height: 400px; overflow-y: auto;" -->
                 <table class="table table-striped table-bordered">
                     <thead class="table-dark">
                         <tr>
@@ -119,73 +98,52 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <th rowspan="2">Total Units</th>
                             <th rowspan="2">Grand Total</th>
                             <th rowspan="2">Buyer Name</th>
-                            <th rowspan="2">First Name</th>
                             <th rowspan="2">Created At</th>
-                            <th colspan="7">Items</th>
+                            <th colspan="4">Items</th>
                         </tr>
                         <tr>
                             <th>Transaction Item ID</th>
+                            <th>Cart ID</th>
                             <th>Sold Price</th>
                             <th>IMEI</th>
-                            <th>Description</th>
-                            <th>Buy Price</th>
-                            <th>SRP</th>
-                            <th>Date Stock In</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($transactions as $transaction): ?>
                             <?php
                             // Fetch items for the current transaction
-                            $transactionItemQuery = "SELECT 
-                                                        ti.transaction_item_id AS transaction_item_id,
-                                                        ti.sold_price AS sold_price,
-                                                        ti.imei AS imei,
-                                                        pu.buy_price AS buy_price,
-                                                        pu.srp AS srp,
-                                                        pu.product_unit_description AS product_unit_description,
-                                                        pu.date_stock_in AS date_stock_in
-                                                    FROM transaction_items ti
-                                                    JOIN product_unit pu ON ti.imei = pu.imei
-                                                    WHERE ti.cart_id = ?";
+                            $transactionItemQuery = "SELECT * FROM transaction_items WHERE cart_id = ?";
                             $itemStmt = $conn->prepare($transactionItemQuery);
-                            $itemStmt->bind_param("i", $transaction['cart_id']);
+                            $itemStmt->bind_param("i", $transaction['CART_ID']);
                             $itemStmt->execute();
                             $transactionItems = $itemStmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             $itemCount = count($transactionItems);
                             ?>
                             <tr>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['transactions_id']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['cart_id']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['transaction_status']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['shipping_address']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['total_unit']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['grand_total']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['buyer_name']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['first_name']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['created_at']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['TRANSACTIONS_ID']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['CART_ID']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['TRANSACTION_STATUS']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['SHIPPING_ADDRESS']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['TOTAL_UNIT']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['GRAND_TOTAL']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['BUYER_NAME']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['CREATED_AT']); ?></td>
                                 <?php if (!empty($transactionItems)): ?>
-                                    <td><?= htmlspecialchars($transactionItems[0]['transaction_item_id']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['sold_price']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['imei']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['product_unit_description']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['buy_price']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['srp']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['date_stock_in']); ?></td>
+                                    <td><?= htmlspecialchars($transactionItems[0]['TRANSACTION_ITEM_ID']); ?></td>
+                                    <td><?= htmlspecialchars($transactionItems[0]['CART_ID']); ?></td>
+                                    <td><?= htmlspecialchars($transactionItems[0]['SOLD_PRICE']); ?></td>
+                                    <td><?= htmlspecialchars($transactionItems[0]['IMEI']); ?></td>
                                 <?php else: ?>
-                                    <td colspan="8" class="text-center">No items found</td>
+                                    <td colspan="4" class="text-center">No items found</td>
                                 <?php endif; ?>
                             </tr>
                             <?php if (!empty($transactionItems)): ?>
                                 <?php for ($i = 1; $i < $itemCount; $i++): ?>
                                     <tr>
-                                        <td><?= htmlspecialchars($transactionItems[$i]['transaction_item_id']); ?></td>
-                                        <td><?= htmlspecialchars($transactionItems[$i]['sold_price']); ?></td>
-                                        <td><?= htmlspecialchars($transactionItems[$i]['imei']); ?></td>
-                                        <td><?= htmlspecialchars($transactionItems[$i]['product_unit_description']); ?></td>
-                                        <td><?= htmlspecialchars($transactionItems[$i]['buy_price']); ?></td>
-                                        <td><?= htmlspecialchars($transactionItems[$i]['srp']); ?></td>
-                                        <td><?= htmlspecialchars($transactionItems[$i]['date_stock_in']); ?></td>
+                                        <td><?= htmlspecialchars($transactionItems[$i]['TRANSACTION_ITEM_ID']); ?></td>
+                                        <td><?= htmlspecialchars($transactionItems[$i]['CART_ID']); ?></td>
+                                        <td><?= htmlspecialchars($transactionItems[$i]['SOLD_PRICE']); ?></td>
+                                        <td><?= htmlspecialchars($transactionItems[$i]['IMEI']); ?></td>
                                     </tr>
                                 <?php endfor; ?>
                             <?php endif; ?>
