@@ -37,6 +37,7 @@ $conn->query($updateQuantityQuery);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./src/style.css">
 
     <!-- Navbar -->
     <link rel="stylesheet" href="navbar/navbarStyle.css" />
@@ -49,8 +50,7 @@ $conn->query($updateQuantityQuery);
 
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Your Cart</h1>
+    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
         <table class="table table-bordered">
             <thead>
                 <tr>

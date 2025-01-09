@@ -47,25 +47,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container-fluid">
-        <h1 class="my-3">Suppliers</h1>
-        <a href="index.php" class="btn btn-primary mb-3">Home</a>
+    <div class="container-fluid" style="margin-top: 13vh">
 
         <!-- Add Supplier Form -->
-        <div class="sticky-top bg-light p-3 border rounded mb-3">
+        <div class="col-12 mb-3 rounded p-3" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border: 1px solid #dee2e6;">
             <h2>Add Supplier</h2>
             <form method="POST" action="">
-                <div class="mb-3">
-                    <label for="supplier_name" class="form-label">Supplier Name</label>
-                    <input type="text" class="form-control" name="supplier_name" id="supplier_name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="text" class="form-control" name="phone" id="phone" required>
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label for="supplier_name" class="form-label">Supplier Name</label>
+                        <input type="text" class="form-control" name="supplier_name" id="supplier_name" required>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" required>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="phone" id="phone" required>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-success">Add Supplier</button>
             </form>

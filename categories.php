@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container container-for-bg mt-5">
+    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
         <h1 class="text-center">Categories</h1>
         <div id="saveAlertPlaceholder"></div>
         <div id="deleteAlertPlaceholder"></div>

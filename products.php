@@ -61,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container-fluid p-4">
+    <div class="container-fluid p-4 container-for-bg" style="margin-top: 10vh">
         <div class="row">
             <!-- Add Product Section -->
-            <div class="col-12 mb-3" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border-bottom: 1px solid #dee2e6;">
+            <div class="col-12 mb-3 rounded p-3" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border: 1px solid #dee2e6;">
                 <h2>Add Product</h2>
                 <form method="POST" action="" class="row g-3">
                     <div class="col-md-3">
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <!-- Products Table -->
             <div class="col-12">
-                <h2>Products</h2>
+
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>

@@ -51,10 +51,8 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container my-4">
-        <h1 class="text-center">All Transactions</h1>
-        <a href="index.php" class="btn btn-primary mb-3">Home</a>
-
+    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
+        <h1 class="text-center">Transactions</h1>
 
         <!-- Date Filter Form -->
         <form method="GET" action="" class="mb-4">

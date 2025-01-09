@@ -54,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Units</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./src/style.css">
     <style>
         #addProductUnitSection {
             position: sticky;
@@ -75,119 +76,118 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
 <body>
 
     <?php include 'navbar/navbar.php'; ?>
+    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
+        <div id="addProductUnitSection" class="container">
+            <div class="row">
+                <div class="col-12 mb-3" style="position: sticky; top: 0; z-index: 1000;">
+                    <h2>Add Product Unit</h2>
+                    <form method="POST" action="add_product_unit.php">
+                        <div class="row">
+                            <div class="mb-3 col-md-3">
+                                <label for="imei" class="form-label">IMEI:</label>
+                                <input type="text" name="imei" id="imei" class="form-control" required>
+                            </div>
+                            <div class="mb-3 col-md-9">
+                                <label for="product_unit_description" class="form-label">Description:</label>
+                                <textarea name="product_unit_description" id="product_unit_description" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-md-3">
+                                <label for="product_id" class="form-label">Product:</label>
+                                <select name="product_id" id="product_id" class="form-select" required>
+                                    <option value="">-- Select Product --</option>
+                                    <?php while ($product = $productsResult->fetch_assoc()) : ?>
+                                        <option value="<?= $product['PRODUCT_ID']; ?>"><?= $product['PRODUCT_NAME'];  ?> <?= $product['COLOR'];  ?> (Quantity: <?= $product['QUANTITY']; ?>)</option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="supplier_id" class="form-label">Supplier:</label>
+                                <select name="supplier_id" id="supplier_id" class="form-select" required>
+                                    <option value="">-- Select Supplier --</option>
+                                    <?php while ($supplier = $suppliersResult->fetch_assoc()) : ?>
+                                        <option value="<?= $supplier['SUPPLIER_ID']; ?>"><?= $supplier['SUPPLIER_NAME']; ?></option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="buy_price" class="form-label">Buy Price:</label>
+                                <input type="number" name="buy_price" id="buy_price" class="form-control" step="0.01" required>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="srp" class="form-label">SRP:</label>
+                                <input type="number" name="srp" id="srp" class="form-control" step="0.01" required>
+                            </div>
+                        </div>
 
-    <div id="addProductUnitSection" class="container">
-        <div class="row">
-            <div class="col-12 mb-3" style="position: sticky; top: 0; z-index: 1000;">
-                <h2>Add Product Unit</h2>
-                <form method="POST" action="add_product_unit.php">
-                    <div class="row">
-                        <div class="mb-3 col-md-3">
-                            <label for="imei" class="form-label">IMEI:</label>
-                            <input type="text" name="imei" id="imei" class="form-control" required>
-                        </div>
-                        <div class="mb-3 col-md-9">
-                            <label for="product_unit_description" class="form-label">Description:</label>
-                            <textarea name="product_unit_description" id="product_unit_description" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="mb-3 col-md-3">
-                            <label for="product_id" class="form-label">Product:</label>
-                            <select name="product_id" id="product_id" class="form-select" required>
-                                <option value="">-- Select Product --</option>
-                                <?php while ($product = $productsResult->fetch_assoc()) : ?>
-                                    <option value="<?= $product['PRODUCT_ID']; ?>"><?= $product['PRODUCT_NAME'];  ?> <?= $product['COLOR'];  ?> (Quantity: <?= $product['QUANTITY']; ?>)</option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-3">
-                            <label for="supplier_id" class="form-label">Supplier:</label>
-                            <select name="supplier_id" id="supplier_id" class="form-select" required>
-                                <option value="">-- Select Supplier --</option>
-                                <?php while ($supplier = $suppliersResult->fetch_assoc()) : ?>
-                                    <option value="<?= $supplier['SUPPLIER_ID']; ?>"><?= $supplier['SUPPLIER_NAME']; ?></option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-3">
-                            <label for="buy_price" class="form-label">Buy Price:</label>
-                            <input type="number" name="buy_price" id="buy_price" class="form-control" step="0.01" required>
-                        </div>
-                        <div class="mb-3 col-md-3">
-                            <label for="srp" class="form-label">SRP:</label>
-                            <input type="number" name="srp" id="srp" class="form-control" step="0.01" required>
-                        </div>
-                    </div>
-
-                    <button type="submit" name="add_product_unit" class="btn btn-primary">Add Product Unit</button>
-                </form>
+                        <button type="submit" name="add_product_unit" class="btn btn-primary">Add Product Unit</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container mt-4">
-        <h1>Product Units</h1>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>IMEI</th>
-                    <th>Product Name</th>
-                    <th>Supplier Name</th>
-                    <th>Buy Price</th>
-                    <th>SRP</th>
-                    <th>Description</th>
-                    <th>Date Stock In</th>
-                    <th>Action</th>
-                    <th>Additional Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($productUnit = $productUnitsResult->fetch_assoc()) : ?>
+        <div class="container mt-4">
+            <table class="table table-bordered">
+                <thead>
                     <tr>
-                        <td><?= htmlspecialchars($productUnit['IMEI']); ?></td>
-                        <td><?= htmlspecialchars($productUnit['PRODUCT_NAME']); ?> - <?= htmlspecialchars($productUnit['COLOR']); ?></td>
-                        <td><?= htmlspecialchars($productUnit['SUPPLIER_NAME']); ?></td>
-                        <td><?= htmlspecialchars($productUnit['BUY_PRICE']); ?></td>
-                        <td><?= htmlspecialchars($productUnit['SRP']); ?></td>
-                        <td><?= htmlspecialchars($productUnit['PRODUCT_UNIT_DESCRIPTION']); ?></td>
-                        <td><?= htmlspecialchars($productUnit['DATE_STOCK_IN']); ?></td>
+                        <th>IMEI</th>
+                        <th>Product Name</th>
+                        <th>Supplier Name</th>
+                        <th>Buy Price</th>
+                        <th>SRP</th>
+                        <th>Description</th>
+                        <th>Date Stock In</th>
+                        <th>Action</th>
+                        <th>Additional Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($productUnit = $productUnitsResult->fetch_assoc()) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($productUnit['IMEI']); ?></td>
+                            <td><?= htmlspecialchars($productUnit['PRODUCT_NAME']); ?> - <?= htmlspecialchars($productUnit['COLOR']); ?></td>
+                            <td><?= htmlspecialchars($productUnit['SUPPLIER_NAME']); ?></td>
+                            <td><?= htmlspecialchars($productUnit['BUY_PRICE']); ?></td>
+                            <td><?= htmlspecialchars($productUnit['SRP']); ?></td>
+                            <td><?= htmlspecialchars($productUnit['PRODUCT_UNIT_DESCRIPTION']); ?></td>
+                            <td><?= htmlspecialchars($productUnit['DATE_STOCK_IN']); ?></td>
 
-                        <td>
-                            <?php if ($productUnit['SOLD'] == 1) : ?>
-                                <button class="btn btn-primary" disabled>SOLD</button>
-                            <?php elseif (!$productUnit['ADDED_TO_CART']) : ?>
-                                <button class="btn btn-success" onclick="showSoldPriceModal('<?= htmlspecialchars($productUnit['IMEI']); ?>')">Add to Cart</button>
-                            <?php elseif ($productUnit['ADDED_TO_CART'] == 1) : ?>
-                                <form action="remove_from_cart_direct.php" method="post" onsubmit="return confirmDelete();">
-                                    <input type="hidden" name="imei" value="<?= htmlspecialchars($productUnit['IMEI']); ?>">
-                                    <button type="submit" class="btn btn-danger">Remove from Cart</button>
-                                </form>
-                            <?php endif; ?>
-                        </td>
+                            <td>
+                                <?php if ($productUnit['SOLD'] == 1) : ?>
+                                    <button class="btn btn-primary" disabled>SOLD</button>
+                                <?php elseif (!$productUnit['ADDED_TO_CART']) : ?>
+                                    <button class="btn btn-success" onclick="showSoldPriceModal('<?= htmlspecialchars($productUnit['IMEI']); ?>')">Add to Cart</button>
+                                <?php elseif ($productUnit['ADDED_TO_CART'] == 1) : ?>
+                                    <form action="remove_from_cart_direct.php" method="post" onsubmit="return confirmDelete();">
+                                        <input type="hidden" name="imei" value="<?= htmlspecialchars($productUnit['IMEI']); ?>">
+                                        <button type="submit" class="btn btn-danger">Remove from Cart</button>
+                                    </form>
+                                <?php endif; ?>
+                            </td>
 
 
-                        <td>
-                            <!-- <a href="edit_product_unit.php?imei=<?= htmlspecialchars($productUnit['IMEI']); ?>" class="btn btn-warning">Edit</a> -->
-                            <a href="#" class="btn btn-warning"
-                                onclick="showEditModal('<?= htmlspecialchars($productUnit['IMEI']); ?>', 
+                            <td>
+                                <!-- <a href="edit_product_unit.php?imei=<?= htmlspecialchars($productUnit['IMEI']); ?>" class="btn btn-warning">Edit</a> -->
+                                <a href="#" class="btn btn-warning"
+                                    onclick="showEditModal('<?= htmlspecialchars($productUnit['IMEI']); ?>', 
                           '<?= htmlspecialchars($productUnit['PRODUCT_UNIT_DESCRIPTION']); ?>', 
                           <?= htmlspecialchars($productUnit['BUY_PRICE']); ?>, 
                           <?= htmlspecialchars($productUnit['SRP']); ?>)">
-                                Edit
-                            </a>
+                                    Edit
+                                </a>
 
-                            <form action="delete_product_unit.php" method="post" style="display:inline;" onsubmit="return confirmDelete();">
-                                <input type="hidden" name="imei" value="<?= htmlspecialchars($productUnit['IMEI']); ?>">
-                                <button type="submit" class="btn btn-danger mt-1">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                                <form action="delete_product_unit.php" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                                    <input type="hidden" name="imei" value="<?= htmlspecialchars($productUnit['IMEI']); ?>">
+                                    <button type="submit" class="btn btn-danger mt-1">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-
     <!-- Modal for Sold Price -->
     <div class="modal fade" id="soldPriceModal" tabindex="-1" aria-labelledby="soldPriceModalLabel" aria-hidden="true">
         <div class="modal-dialog">
