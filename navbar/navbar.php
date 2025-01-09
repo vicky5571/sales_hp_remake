@@ -18,6 +18,7 @@
   }
   // Example: Assume USER_ROLE is stored in the session
   $userRole = $_SESSION['USER_ROLE'] ?? null; // Default to null if not set
+
   // Get the current script name (e.g., index.php)
   $currentPage = basename($_SERVER['PHP_SELF']);
   ?>

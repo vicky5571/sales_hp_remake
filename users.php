@@ -3,7 +3,7 @@ session_start();
 
 // Check user role
 if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['MANAJER', 'OWNER', 'ADMIN'])) {
-    die("Access denied");
+    echo '<script>alert("Access Denied! You do not have permission to access this page."); window.location.href="index.php";</script>';
 }
 
 require_once 'conn.php';
