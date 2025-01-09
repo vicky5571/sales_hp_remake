@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
 
     <?php include 'navbar/navbar.php'; ?>
     <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
-        <div id="addProductUnitSection" class="container">
+        <div id="addProductUnitSection" class="container mt-3">
             <div class="row">
                 <div class="col-12 mb-3" style="position: sticky; top: 0; z-index: 1000;">
                     <h2>Add Product Unit</h2>
@@ -245,6 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
             </div>
         </div>
     </div>
+
 
 
     <script>
