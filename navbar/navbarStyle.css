@@ -12,6 +12,19 @@
   --yellow-rgb: 253 224 71;
 }
 
+.active-page-title {
+  white-space: nowrap;
+  text-align: left;
+
+  font-size: 5rem !important;
+  font-weight: bolder;
+  width: 600px;
+}
+
+.active-page-title p {
+  margin: 0;
+}
+
 .navbar-wrapper * {
   padding: 0;
   margin: 0;
@@ -24,7 +37,7 @@
 .navbar-wrapper .navbar {
   display: flex;
   background-color: rgb(27, 27, 27);
-  padding: 15px 20px;
+  padding: 15px 2px;
   color: white;
   width: 100%;
   align-items: center;
@@ -36,8 +49,8 @@
 }
 
 .navbar-wrapper .data-container {
-  width: 100%;
-  max-width: 1200px;
+  width: 90vw; /* 100% */
+  max-width: 90vw; /* 1200px */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,6 +99,41 @@
 
 .navbar-wrapper #close {
   display: none;
+}
+
+.profile-container {
+  position: relative;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.profile-container i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.profile-dropdown {
+  display: none;
+  color: #333;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 200px;
+  z-index: 1000;
+}
+
+.profile-dropdown p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+.profile-dropdown.show {
+  display: block;
 }
 
 /* Responsive Styles */
