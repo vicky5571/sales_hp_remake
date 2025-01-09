@@ -166,9 +166,9 @@ $conn->query($updateQuantityQuery);
                                 <label for="transactionStatus" class="form-label">Transaction Status</label>
                                 <select name="transaction_status" id="transactionStatus" class="form-select">
                                     <option value="done" selected>Done</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="paid">Paid</option>
                                     <option value="on the way">On the Way</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="pending">Pending</option>
                                 </select>
                             </div>
                             <div class="mb-3">

@@ -161,7 +161,11 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <tr>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['transactions_id']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['cart_id']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['transaction_status']); ?></td>
+                                <!-- <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['transaction_status']); ?></td> -->
+                                <td rowspan="<?= $itemCount ?: 1; ?>" onclick="openStatusModal('<?= $transaction['transactions_id']; ?>', '<?= htmlspecialchars($transaction['transaction_status']); ?>')">
+                                    <?= htmlspecialchars($transaction['transaction_status']); ?>
+                                </td>
+
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['shipping_address']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['total_unit']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= number_format($transaction['grand_total'], 2, '.', ','); ?></td>
@@ -207,6 +211,50 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             <p class="alert alert-warning text-center">No transactions found for the selected date range.</p>
         <?php endif; ?>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="statusForm" method="POST" action="update_status.php">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="statusModalLabel">Change Transaction Status</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="transactions_id" id="modalTransactionId">
+                        <div class="mb-3">
+                            <label for="transactionStatus" class="form-label">Transaction Status</label>
+                            <select class="form-select" name="transaction_status" id="transactionStatus" required>
+                                <option value="done" selected>Done</option>
+                                <option value="on the way">On the Way</option>
+                                <option value="paid">Paid</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function openStatusModal(transactionId, currentStatus) {
+            // Set transaction ID and current status in the modal
+            document.getElementById('modalTransactionId').value = transactionId;
+            document.getElementById('transactionStatus').value = currentStatus;
+
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('statusModal'));
+            modal.show();
+        }
+    </script>
+
 </body>
 
 </html>
