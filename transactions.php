@@ -2,6 +2,14 @@
 // Include database connection
 require_once 'conn.php';
 
+session_start();
+
+// Check user role
+if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['MANAJER', 'OWNER', 'ADMIN'])) {
+    echo '<script>alert("Access Denied! You do not have permission to access this page."); window.location.href="index.php";</script>';
+}
+
+
 // Initialize filter variables
 $startDate = '';
 $endDate = '';

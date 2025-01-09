@@ -4,6 +4,8 @@ require_once 'conn.php';
 
 session_start();
 
+$user_role = $_SESSION['user_role'] ?? null;
+
 // Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -81,4 +83,16 @@ $stmt->bind_param("i", $cart_id);
 $stmt->execute();
 
 // Redirect to a success page
-echo "<script>alert('Checkout successful! Your transaction ID is $transaction_id'); window.location.href='success_page.php';</script>";
+// echo "<script>alert('Checkout successful! Your transaction ID is $transaction_id'); window.location.href='index.php';</script>";
+?>
+<?php if ($user_role === 'KARYAWAN'): ?>
+    echo "<script>
+        alert('Checkout successful! Your transaction ID is $transaction_id');
+        window.location.href = 'index.php';
+    </script>";
+<?php else: ?>
+    echo "<script>
+        alert('Checkout successful! Your transaction ID is $transaction_id');
+        window.location.href = 'transactions.php';
+    </script>";
+<?php endif; ?>

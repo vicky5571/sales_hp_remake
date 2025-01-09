@@ -5,6 +5,9 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Initialize $user_role from the session
+$user_role = $_SESSION['user_role'] ?? null;
+
 
 // session_start();
 // if (!isset($_SESSION['user_id'])) {
@@ -92,7 +95,7 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                 </a>
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <a href="transactions.php" class="text-decoration-none">
                     <div class="card text-center project-tilt-box">
                         <div class="card-body">
@@ -101,7 +104,19 @@ if (!isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </a>
-            </div>
+            </div> -->
+            <?php if ($user_role !== 'KARYAWAN'): ?>
+                <div class="col-md-4">
+                    <a href="transactions.php" class="text-decoration-none">
+                        <div class="card text-center project-tilt-box">
+                            <div class="card-body">
+                                <h5 class="card-title">Transactions</h5>
+                                <img class="project-img" src="img/transactions.png" alt="Transactions Image" />
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <?php endif; ?>
             <!-- <div class="col-md-4">
                 <a href="users.php" class="text-decoration-none">
                     <div class="card text-center project-tilt-box">
