@@ -84,7 +84,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 <body>
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
+    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh; min-width: 90vw !important;">
         <h1 class="text-center mt-4">Transactions</h1>
 
         <!-- Date Filter Form -->
