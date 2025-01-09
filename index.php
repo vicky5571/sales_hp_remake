@@ -31,7 +31,7 @@ if (!isset($_SESSION['user_id'])) {
         <div class="tile"></div>
     </div>
     <div class="container mt-5">
-        <h1 class="text-center text-light fw-bold mb-5" style="font-size: 4em !important">POS System Dashboard</h1>
+        <h1 class="text-center text-light fw-bold mb-5" style="font-size: 4em !important">Store</h1>
         <div class="row mt-4 mb-4">
             <!-- Card -->
             <div class="col-md-4">

@@ -15,11 +15,13 @@ $suppliersResult = $conn->query($suppliersQuery);
 
 // Fetch product units
 $productUnitsQuery = "SELECT pu.IMEI, p.PRODUCT_NAME, s.SUPPLIER_NAME, pu.BUY_PRICE, pu.SRP, 
-                      pu.PRODUCT_UNIT_DESCRIPTION, pu.DATE_STOCK_IN, pu.ADDED_TO_CART 
+                      pu.PRODUCT_UNIT_DESCRIPTION, pu.DATE_STOCK_IN, pu.ADDED_TO_CART, pu.SOLD 
                       FROM PRODUCT_UNIT pu
                       JOIN PRODUCTS p ON pu.PRODUCT_ID = p.PRODUCT_ID
                       JOIN SUPPLIERS s ON pu.SUPPLIER_ID = s.SUPPLIER_ID";
 $productUnitsResult = $conn->query($productUnitsQuery);
+
+// Handle form
 
 ?>
 
@@ -45,45 +47,56 @@ $productUnitsResult = $conn->query($productUnitsQuery);
 </head>
 
 <body>
+
+
     <div id="addProductUnitSection" class="container">
-        <h2>Add Product Unit</h2>
-        <form method="POST" action="">
-            <div class="mb-3">
-                <label for="imei" class="form-label">IMEI:</label>
-                <input type="text" name="imei" id="imei" class="form-control" required>
+        <div class="row">
+            <div class="col-12 mb-3" style="position: sticky; top: 0; z-index: 1000;">
+                <h2>Add Product Unit</h2>
+                <form method="POST" action="add_product_unit.php">
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label for="imei" class="form-label">IMEI:</label>
+                            <input type="text" name="imei" id="imei" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-9">
+                            <label for="product_unit_description" class="form-label">Description:</label>
+                            <textarea name="product_unit_description" id="product_unit_description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label for="product_id" class="form-label">Product:</label>
+                            <select name="product_id" id="product_id" class="form-select" required>
+                                <option value="">-- Select Product --</option>
+                                <?php while ($product = $productsResult->fetch_assoc()) : ?>
+                                    <option value="<?= $product['PRODUCT_ID']; ?>"><?= $product['PRODUCT_NAME']; ?> (Quantity: <?= $product['QUANTITY']; ?>)</option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="supplier_id" class="form-label">Supplier:</label>
+                            <select name="supplier_id" id="supplier_id" class="form-select" required>
+                                <option value="">-- Select Supplier --</option>
+                                <?php while ($supplier = $suppliersResult->fetch_assoc()) : ?>
+                                    <option value="<?= $supplier['SUPPLIER_ID']; ?>"><?= $supplier['SUPPLIER_NAME']; ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="buy_price" class="form-label">Buy Price:</label>
+                            <input type="number" name="buy_price" id="buy_price" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="srp" class="form-label">SRP:</label>
+                            <input type="number" name="srp" id="srp" class="form-control" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" name="add_product_unit" class="btn btn-primary">Add Product Unit</button>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="product_id" class="form-label">Product:</label>
-                <select name="product_id" id="product_id" class="form-select" required>
-                    <option value="">-- Select Product --</option>
-                    <?php while ($product = $productsResult->fetch_assoc()) : ?>
-                        <option value="<?= $product['PRODUCT_ID']; ?>"><?= $product['PRODUCT_NAME']; ?> (Quantity: <?= $product['QUANTITY']; ?>)</option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="supplier_id" class="form-label">Supplier:</label>
-                <select name="supplier_id" id="supplier_id" class="form-select" required>
-                    <option value="">-- Select Supplier --</option>
-                    <?php while ($supplier = $suppliersResult->fetch_assoc()) : ?>
-                        <option value="<?= $supplier['SUPPLIER_ID']; ?>"><?= $supplier['SUPPLIER_NAME']; ?></option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="buy_price" class="form-label">Buy Price:</label>
-                <input type="number" name="buy_price" id="buy_price" class="form-control" step="0.01" required>
-            </div>
-            <div class="mb-3">
-                <label for="srp" class="form-label">SRP:</label>
-                <input type="number" name="srp" id="srp" class="form-control" step="0.01" required>
-            </div>
-            <div class="mb-3">
-                <label for="product_unit_description" class="form-label">Description:</label>
-                <textarea name="product_unit_description" id="product_unit_description" class="form-control" required></textarea>
-            </div>
-            <button type="submit" name="add_product_unit" class="btn btn-primary">Add Product Unit</button>
-        </form>
+        </div>
     </div>
 
     <div class="container mt-4">
@@ -112,21 +125,26 @@ $productUnitsResult = $conn->query($productUnitsQuery);
                         <td><?= htmlspecialchars($productUnit['SRP']); ?></td>
                         <td><?= htmlspecialchars($productUnit['PRODUCT_UNIT_DESCRIPTION']); ?></td>
                         <td><?= htmlspecialchars($productUnit['DATE_STOCK_IN']); ?></td>
+
                         <td>
-                            <?php if (!$productUnit['ADDED_TO_CART']) : ?>
+                            <?php if ($productUnit['SOLD'] == 1) : ?>
+                                <button class="btn btn-primary" disabled>SOLD</button>
+                            <?php elseif (!$productUnit['ADDED_TO_CART']) : ?>
                                 <button class="btn btn-success" onclick="showSoldPriceModal('<?= htmlspecialchars($productUnit['IMEI']); ?>')">Add to Cart</button>
-                            <?php else : ?>
-                                <form action="remove_from_cart.php" method="post">
+                            <?php elseif ($productUnit['ADDED_TO_CART'] == 1) : ?>
+                                <form action="remove_from_cart_direct.php" method="post">
                                     <input type="hidden" name="imei" value="<?= htmlspecialchars($productUnit['IMEI']); ?>">
                                     <button type="submit" class="btn btn-danger">Remove from Cart</button>
                                 </form>
                             <?php endif; ?>
                         </td>
+
+
                         <td>
                             <a href="edit_product_unit.php?imei=<?= htmlspecialchars($productUnit['IMEI']); ?>" class="btn btn-warning">Edit</a>
                             <form action="delete_product_unit.php" method="post" style="display:inline;">
                                 <input type="hidden" name="imei" value="<?= htmlspecialchars($productUnit['IMEI']); ?>">
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger mt-1">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -164,6 +182,12 @@ $productUnitsResult = $conn->query($productUnitsQuery);
         function showSoldPriceModal(imei) {
             document.getElementById('modalImei').value = imei;
             var modal = new bootstrap.Modal(document.getElementById('soldPriceModal'));
+            modal.show();
+        }
+
+        function confirmRemove(cartItemId) {
+            document.getElementById('removeCartItemId').value = cartItemId;
+            const modal = new bootstrap.Modal(document.getElementById('removeModal'));
             modal.show();
         }
     </script>

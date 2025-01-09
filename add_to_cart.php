@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $check_cart_result = $conn->query($check_cart_query);
 
     if ($check_cart_result->num_rows > 0) {
-        echo "This item is already in your cart.";
+        echo "<script>alert('This item is already in your cart.'); window.location.href='product_unit.php';</script>";
     } else {
         // Insert item into cart_items table
         $insert_query = "INSERT INTO cart_items (cart_id, sold_price, imei) VALUES ('$cart_id', '$sold_price', '$imei')";
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $update_product_unit_query = "UPDATE product_unit SET ADDED_TO_CART = 1 WHERE IMEI = '$imei'";
             $conn->query($update_product_unit_query);
 
-            echo "Item added to cart successfully!";
+            echo "<script>alert('Item added to cart successfully!'); window.location.href='product_unit.php';</script>";
         } else {
             die("Error adding item to cart: " . $conn->error);
         }
