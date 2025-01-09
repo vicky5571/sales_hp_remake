@@ -127,9 +127,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
             </div>
         </div>
 
-        <div class="container mt-4">
-            <table class="table table-bordered">
-                <thead>
+        <div class="table-responsive mt-4 bg-light">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
                     <tr>
                         <th>IMEI</th>
                         <th>Product Name</th>

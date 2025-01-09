@@ -40,6 +40,8 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         }
     </script>
 
+    <link rel="stylesheet" href="./src/style.css">
+
     <!-- Navbar -->
     <link rel="stylesheet" href="navbar/navbarStyle.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -52,7 +54,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     <?php include 'navbar/navbar.php'; ?>
 
     <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
-        <h1 class="text-center">Transactions</h1>
+        <h1 class="text-center mt-4">Transactions</h1>
 
         <!-- Date Filter Form -->
         <form method="GET" action="" class="mb-4">
@@ -76,8 +78,9 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         </form>
 
         <?php if (!empty($transactions)): ?>
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped">
+            <div class="table-responsive mt-4 bg-light">
+                <!-- style="max-height: 400px; overflow-y: auto;" -->
+                <table class="table table-striped table-bordered">
                     <thead class="table-dark">
                         <tr>
                             <th rowspan="2">Transaction ID</th>

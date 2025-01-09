@@ -50,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="./src/style.css">
+
     <!-- Navbar -->
     <link rel="stylesheet" href="navbar/navbarStyle.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -61,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container-fluid p-4 container-for-bg" style="margin-top: 10vh">
+    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
         <div class="row">
             <!-- Add Product Section -->
             <div class="col-12 mb-3 rounded p-3" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border: 1px solid #dee2e6;">
@@ -95,10 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <!-- Products Table -->
-            <div class="col-12">
+            <div class="table-responsive mt-4 bg-light" style="max-height: 400px; overflow-y: auto;">
 
                 <table class="table table-striped table-bordered">
-                    <thead>
+                    <thead class="table-dark">
                         <tr>
                             <th>Product ID</th>
                             <th>Category</th>

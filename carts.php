@@ -44,98 +44,146 @@ $conn->query($updateQuantityQuery);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
     <script src="navbar/navbarScript.js"></script>
+
+    <style>
+        .summary-container {
+            background-color: #f8f9fa;
+            /* Light background */
+            border-radius: 15px;
+            /* Rounded corners */
+            padding: 20px;
+            /* Space inside the div */
+            margin-top: 20px;
+            /* Space above the container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow */
+            text-align: left;
+            /* Center the text */
+            font-family: inherit;
+            /* Inherit font-family from parent or match the table */
+            font-weight: bold;
+            /* Match the <thead> bold text */
+            width: 100%;
+            /* Full width by default */
+            max-width: 400px;
+            /* Limit the maximum width */
+        }
+
+        .summary-container p {
+            font-size: 1.1rem;
+            /* Adjust to match <thead> font size */
+            margin: 10px 0;
+            /* Space between paragraphs */
+            color: #000;
+            /* Ensure text color matches <thead> */
+        }
+
+        .summary-container .btn {
+            margin-top: 10px;
+            /* Space above the button */
+            padding: 10px 20px;
+            /* Comfortable button size */
+            font-size: 1rem;
+            /* Button text size matches table head */
+            font-weight: bold;
+            /* Bold text to match <thead> */
+        }
+    </style>
 </head>
 
 <body>
 
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>IMEI</th>
-                    <th>Description</th>
-                    <th>Buy Price</th>
-                    <th>SRP</th>
-                    <th>Sold Price</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($cartItems as $item): ?>
+    <div class="container container-for-bg rounded border border-primary " style="margin-top: 13vh">
+        <div class="table-responsive mt-4 bg-light" style="max-height: 800px; overflow-y: auto;">
+            <table class="table table-striped table-bordered mb-4">
+                <thead class="table-dark">
                     <tr>
-                        <td><?= $item['IMEI'] ?></td>
-                        <td><?= $item['PRODUCT_UNIT_DESCRIPTION'] ?></td>
-                        <td><?= $item['BUY_PRICE'] ?></td>
-                        <td><?= $item['SRP'] ?></td>
-                        <td><?= $item['sold_price']; ?></td>
-                        <td>
-                            <button class="btn btn-danger" onclick="confirmRemove(<?= $item['cart_item_id'] ?>)">Remove</button>
-                        </td>
+                        <th>IMEI</th>
+                        <th>Description</th>
+                        <th>Buy Price</th>
+                        <th>SRP</th>
+                        <th>Sold Price</th>
+                        <th>Action</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <p>Total Items: <?= count($cartItems) ?></p>
-        <p>Total Price: <?= $totalPrice ?></p>
-        <button class="btn btn-success" onclick="confirmCheckout()">Checkout</button>
-    </div>
+                </thead>
+                <tbody>
+                    <?php foreach ($cartItems as $item): ?>
+                        <tr>
+                            <td><?= $item['IMEI'] ?></td>
+                            <td><?= $item['PRODUCT_UNIT_DESCRIPTION'] ?></td>
+                            <td><?= $item['BUY_PRICE'] ?></td>
+                            <td><?= $item['SRP'] ?></td>
+                            <td><?= $item['sold_price']; ?></td>
+                            <td>
+                                <button class="btn btn-danger" onclick="confirmRemove(<?= $item['cart_item_id'] ?>)">Remove</button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="summary-container">
+            <p>Total Items : Rp<?= count($cartItems) ?></p>
+            <p>Total Price : Rp<?= $totalPrice ?></p>
+            <button class="btn btn-success" onclick="confirmCheckout()">Checkout</button>
+        </div>
 
-    <!-- Remove Confirmation Modal -->
-    <div class="modal" id="removeModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Remove Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to remove this item?</p>
-                </div>
-                <div class="modal-footer">
-                    <form method="POST" action="remove_from_cart.php">
-                        <input type="hidden" name="cart_item_id" id="removeCartItemId">
-                        <button type="submit" class="btn btn-danger">Yes, Remove</button>
-                    </form>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Remove Confirmation Modal -->
+        <div class="modal" id="removeModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Remove Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to remove this item?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="POST" action="remove_from_cart.php">
+                            <input type="hidden" name="cart_item_id" id="removeCartItemId">
+                            <button type="submit" class="btn btn-danger">Yes, Remove</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Checkout Confirmation Modal -->
-    <div class="modal" id="checkoutModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Checkout</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to checkout?</p>
-                </div>
-                <div class="modal-footer">
-                    <a href="checkout.php" class="btn btn-success">Yes, Checkout</a>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Checkout Confirmation Modal -->
+        <div class="modal" id="checkoutModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Checkout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to checkout?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="checkout.php" class="btn btn-success">Yes, Checkout</a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function confirmRemove(cartItemId) {
-            document.getElementById('removeCartItemId').value = cartItemId;
-            const modal = new bootstrap.Modal(document.getElementById('removeModal'));
-            modal.show();
-        }
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function confirmRemove(cartItemId) {
+                document.getElementById('removeCartItemId').value = cartItemId;
+                const modal = new bootstrap.Modal(document.getElementById('removeModal'));
+                modal.show();
+            }
 
-        function confirmCheckout() {
-            const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
-            modal.show();
-        }
-    </script>
+            function confirmCheckout() {
+                const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                modal.show();
+            }
+        </script>
 </body>
 
 </html>

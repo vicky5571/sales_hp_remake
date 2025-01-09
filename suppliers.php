@@ -36,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="./src/style.css">
+
     <!-- Navbar -->
     <link rel="stylesheet" href="navbar/navbarStyle.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -47,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <?php include 'navbar/navbar.php'; ?>
 
-    <div class="container-fluid" style="margin-top: 13vh">
+    <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
 
         <!-- Add Supplier Form -->
         <div class="col-12 mb-3 rounded p-3" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border: 1px solid #dee2e6;">

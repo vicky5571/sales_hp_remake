@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div id="saveAlertPlaceholder"></div>
         <div id="deleteAlertPlaceholder"></div>
 
-        <div class="mt-4">
+        <div class="table-responsive mt-4 bg-light" style="max-height: 400px; overflow-y: auto;">
             <!-- Add New Category Form -->
             <form method="POST" class="d-flex mb-4">
                 <input type="text" name="category_name" class="form-control me-2" placeholder="Enter Category Name" required>
@@ -107,8 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <!-- Categories Table -->
-            <table class="table table-bordered">
-                <thead>
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
                     <tr>
                         <th>ID</th>
                         <th>Category Name</th>
