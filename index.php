@@ -23,13 +23,21 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="src/tiles.css" />
     <link rel="stylesheet" href="src/vanilla-tilt.css">
 
+    <!-- Navbar -->
+    <link rel="stylesheet" href="navbar/navbarStyle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
+    <script src="navbar/navbarScript.js"></script>
+
 </head>
 
 <body>
-
+    <?php include 'navbar/navbar.php'; ?>
     <div id="container">
         <div class="tile"></div>
     </div>
+
+
     <div class="container mt-5">
         <h1 class="text-center text-light fw-bold mb-5" style="font-size: 4em !important">Store</h1>
         <div class="row mt-4 mb-4">

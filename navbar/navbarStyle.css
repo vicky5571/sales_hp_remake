@@ -1,0 +1,99 @@
+/* General Reset */
+.navbar-wrapper {
+  font-size: 26px;
+}
+
+.navbar-wrapper * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2rem;
+}
+
+/* Navbar Styling */
+.navbar-wrapper .navbar {
+  display: flex;
+  background-color: black;
+  padding: 15px 20px;
+  color: white;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001; /* Ensures the navbar stays above other elements */
+}
+
+.navbar-wrapper .data-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-wrapper .Logo {
+  width: 70px;
+}
+
+.navbar-wrapper a {
+  text-decoration: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 25px;
+  transition: background-color 0.3s ease-in;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.navbar-wrapper .menu-data {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-wrapper a:hover {
+  background-color: white;
+  color: rgb(0, 12, 34);
+}
+
+.navbar-wrapper .size-icon {
+  font-size: 26px;
+}
+
+.navbar-wrapper #Menu-bar {
+  display: none;
+  margin-left: auto;
+}
+
+.navbar-wrapper #close {
+  display: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 761px) {
+  .navbar-wrapper .menu-data {
+    position: absolute;
+    flex-direction: column;
+    text-align: left;
+    align-items: flex-end;
+    left: 100%;
+    top: 0;
+    transform: translate(-100%);
+    background-color: black;
+    width: 250px;
+    padding: 20px;
+    transition: display ease-in 5s;
+    z-index: -10;
+  }
+
+  .navbar-wrapper #Menu-bar {
+    display: block;
+  }
+
+  .navbar-wrapper #close {
+    display: block;
+  }
+}
