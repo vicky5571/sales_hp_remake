@@ -2,9 +2,26 @@
 // Include database connection
 require_once 'conn.php';
 
-// Fetch all transactions
-$transactionQuery = "SELECT * FROM transactions ORDER BY created_at DESC";
-$stmt = $conn->prepare($transactionQuery);
+// Initialize filter variables
+$startDate = '';
+$endDate = '';
+
+// Check if the filter form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['start_date'], $_GET['end_date'])) {
+    $startDate = $_GET['start_date'];
+    $endDate = $_GET['end_date'];
+
+    // Fetch transactions within the selected date range
+    $transactionQuery = "SELECT * FROM transactions WHERE created_at BETWEEN ? AND ? ORDER BY created_at DESC";
+    $stmt = $conn->prepare($transactionQuery);
+    $stmt->bind_param('ss', $startDate, $endDate);
+} else {
+    // Fetch all transactions if no filter is applied
+    $transactionQuery = "SELECT * FROM transactions ORDER BY created_at DESC";
+    $stmt = $conn->prepare($transactionQuery);
+}
+
+// Execute the query
 $stmt->execute();
 $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -28,7 +45,29 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     <div class="container my-4">
         <h1 class="text-center">All Transactions</h1>
         <a href="index.php" class="btn btn-primary mb-3">Home</a>
-        <button class="btn btn-success mb-3" onclick="printPage()">Print</button>
+
+
+        <!-- Date Filter Form -->
+        <form method="GET" action="" class="mb-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="start_date" class="form-label">From:</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" value="<?= htmlspecialchars($startDate); ?>" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="end_date" class="form-label">To:</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" value="<?= htmlspecialchars($endDate); ?>" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-success w-100" onclick="printPage()">Print</button>
+                </div>
+
+            </div>
+        </form>
+
         <?php if (!empty($transactions)): ?>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
@@ -95,7 +134,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 </table>
             </div>
         <?php else: ?>
-            <p class="alert alert-warning text-center">No transactions found.</p>
+            <p class="alert alert-warning text-center">No transactions found for the selected date range.</p>
         <?php endif; ?>
     </div>
 </body>
