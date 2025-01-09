@@ -21,6 +21,13 @@ $result = $conn->query($query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Navbar -->
+    <link rel="stylesheet" href="navbar/navbarStyle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
+    <script src="navbar/navbarScript.js"></script>
+
     <style>
         .container-for-bg {
             margin-top: 13vh;
@@ -43,6 +50,9 @@ $result = $conn->query($query);
 </head>
 
 <body>
+
+    <?php include 'navbar/navbar.php'; ?>
+
     <div class="container container-for-bg rounded p-4">
         <div class="mb-4">
             <h1 class="text-center">Users Management</h1>

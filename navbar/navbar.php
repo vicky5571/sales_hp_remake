@@ -12,6 +12,12 @@
 <body>
 
   <?php
+  // Ensure session is started
+  if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+  }
+  // Example: Assume USER_ROLE is stored in the session
+  $userRole = $_SESSION['USER_ROLE'] ?? null; // Default to null if not set
   // Get the current script name (e.g., index.php)
   $currentPage = basename($_SERVER['PHP_SELF']);
   ?>
@@ -28,6 +34,12 @@
           <a href="suppliers.php" class="<?= $currentPage === 'suppliers.php' ? 'active' : '' ?>">Suppliers</a>
           <a href="product_unit.php" class="<?= $currentPage === 'product_unit.php' ? 'active' : '' ?>">Product Unit</a>
           <a href="carts.php" class="<?= $currentPage === 'carts.php' ? 'active' : '' ?>">Carts</a>
+
+          <!-- Conditionally Render Users Link -->
+          <?php if ($userRole !== 'KARYAWAN'): ?>
+            <a href="users.php" class="<?= $currentPage === 'users.php' ? 'active' : '' ?>">Users</a>
+          <?php endif; ?>
+
         </div>
         <a id="Menu-bar" onclick="menubar()"><i class="size-icon fa-solid fa-bars"></i></a>
       </div>
