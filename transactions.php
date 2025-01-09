@@ -121,7 +121,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <th rowspan="2">Buyer Name</th>
                             <th rowspan="2">First Name</th>
                             <th rowspan="2">Created At</th>
-                            <th colspan="8">Items</th>
+                            <th colspan="9">Items</th>
                         </tr>
                         <tr>
                             <th>Transaction Item ID</th>
@@ -130,6 +130,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <th>Description</th>
                             <th>Buy Price</th>
                             <th>SRP</th>
+                            <th>Profit</th>
                             <th>Date Stock In</th>
                             <th>Supplier Name</th>
                         </tr>
@@ -163,22 +164,24 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['transaction_status']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['shipping_address']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['total_unit']); ?></td>
-                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['grand_total']); ?></td>
+                                <td rowspan="<?= $itemCount ?: 1; ?>"><?= number_format($transaction['grand_total'], 2, '.', ','); ?></td>
+
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['buyer_name']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['first_name']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['created_at']); ?></td>
 
                                 <?php if (!empty($transactionItems)): ?>
                                     <td><?= htmlspecialchars($transactionItems[0]['transaction_item_id']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['sold_price']); ?></td>
+                                    <td><?= number_format($transactionItems[0]['sold_price'], 2, '.', ','); ?></td>
                                     <td><?= htmlspecialchars($transactionItems[0]['imei']); ?></td>
                                     <td><?= htmlspecialchars($transactionItems[0]['product_unit_description']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['buy_price']); ?></td>
-                                    <td><?= htmlspecialchars($transactionItems[0]['srp']); ?></td>
+                                    <td><?= number_format($transactionItems[0]['buy_price'], 2, '.', ','); ?></td>
+                                    <td><?= number_format($transactionItems[0]['srp'], 2, '.', ','); ?></td>
+                                    <td><?= number_format($transactionItems[0]['sold_price'] - $transactionItems[0]['buy_price'], 2, '.', ','); ?></td>
                                     <td><?= htmlspecialchars($transactionItems[0]['date_stock_in']); ?></td>
                                     <td><?= htmlspecialchars($transactionItems[0]['supplier_name']); ?></td>
                                 <?php else: ?>
-                                    <td colspan="8" class="text-center">No items found</td>
+                                    <td colspan="9" class="text-center">No items found</td>
                                 <?php endif; ?>
                             </tr>
                             <?php if (!empty($transactionItems)): ?>
@@ -190,6 +193,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                                         <td><?= htmlspecialchars($transactionItems[$i]['product_unit_description']); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['buy_price']); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['srp']); ?></td>
+                                        <td><?= number_format($transactionItems[0]['sold_price'] - $transactionItems[0]['buy_price'], 2, '.', ','); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['date_stock_in']); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['supplier_name']); ?></td>
                                     </tr>

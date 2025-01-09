@@ -72,6 +72,33 @@ $stmt = $conn->prepare($updateCartQuery);
 $stmt->bind_param("i", $cart_id);
 $stmt->execute();
 
+// Perform additional cleanup: drop data from cart and cart_items
+$conn->query("SET foreign_key_checks = 0");
+$conn->query("DELETE FROM carts");
+$conn->query("UPDATE product_unit 
+              SET added_to_cart = 0 
+              WHERE imei IN (SELECT imei FROM cart_items)");
+$conn->query("DELETE FROM cart_items");
+$conn->query("SET foreign_key_checks = 1");
+
+// Check if user already has an active cart
+$cart_query = "SELECT * FROM carts WHERE user_id = '$user_id' ORDER BY cart_id DESC LIMIT 1";
+$cart_result = $conn->query($cart_query);
+
+if ($cart_result->num_rows === 0) {
+    // Create a new cart for the user
+    $create_cart_query = "INSERT INTO carts (user_id, quantity) VALUES ('$user_id', 0)";
+    $conn->query($create_cart_query);
+
+    // Store the new cart_id in the session
+    $_SESSION['cart_id'] = $conn->insert_id;
+} else {
+    // Use the existing cart
+    $cart = $cart_result->fetch_assoc();
+    $_SESSION['cart_id'] = $cart['cart_id'];
+}
+
+
 // echo "<script>alert('Checkout successful! Your transaction ID is $transaction_id'); window.location.href='transactions.php';</script>";
 
 if ($user_role === 'KARYAWAN'):
