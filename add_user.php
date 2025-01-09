@@ -36,12 +36,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("ssssss", $first_name, $last_name, $email, $password, $phone, $new_user_role);
 
     if ($stmt->execute()) {
-        echo "User added successfully.";
+        echo "<script>
+                alert('User added successfully.');
+                window.location.href = 'users.php';
+              </script>";
+        exit;
     } else {
-        echo "Error: " . $conn->error;
+        echo "<script>
+                alert('Error: Unable to add user. Please try again.');
+                window.location.href = 'add_user.php';
+              </script>";
+        exit;
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -194,7 +203,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="MANAJER">MANAJER</option>
                     </select><br>
                 <?php else: ?>
-                    <input type="hidden" name="user_role" value="KARYAWAN">
+                    <!-- <input type="hidden" name="user_role" value="KARYAWAN"> -->
+                    <label for="user_role">User Role:</label>
+                    <select id="user_role" name="user_role" required>
+                        <option value="KARYAWAN">KARYAWAN</option>
+                    </select><br>
                 <?php endif; ?>
 
                 <input type="submit" value="Add User">

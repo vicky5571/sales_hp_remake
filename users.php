@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// Initialize $user_role from the session
+$user_role = $_SESSION['user_role'] ?? null;
+
 // Check user role
 if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['MANAJER', 'OWNER', 'ADMIN'])) {
     echo '<script>alert("Access Denied! You do not have permission to access this page."); window.location.href="index.php";</script>';
@@ -123,11 +126,25 @@ $result = $conn->query($query);
                             <input type="text" name="phone" id="edit_phone" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="edit_user_role" class="form-label">User Role:</label>
+                            <!-- <label for="edit_user_role" class="form-label">User Role:</label>
                             <select name="user_role" id="edit_user_role" class="form-select">
                                 <option value="KARYAWAN">KARYAWAN</option>
                                 <option value="MANAJER">MANAJER</option>
-                            </select>
+                            </select> -->
+
+                            <?php if ($user_role === 'OWNER' || $user_role === 'ADMIN'): ?>
+                                <label for="user_role">User Role:</label>
+                                <select id="user_role" name="user_role" required>
+                                    <option value="KARYAWAN">KARYAWAN</option>
+                                    <option value="MANAJER">MANAJER</option>
+                                </select><br>
+                            <?php else: ?>
+                                <!-- <input type="hidden" name="user_role" value="KARYAWAN"> -->
+                                <label for="user_role">User Role:</label>
+                                <select id="user_role" name="user_role" required>
+                                    <option value="KARYAWAN">KARYAWAN</option>
+                                </select><br>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="modal-footer">
