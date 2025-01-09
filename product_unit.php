@@ -64,10 +64,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
     </style>
+
+    <!-- Navbar -->
+    <link rel="stylesheet" href="navbar/navbarStyle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
+    <script src="navbar/navbarScript.js"></script>
 </head>
 
 <body>
 
+    <?php include 'navbar/navbar.php'; ?>
 
     <div id="addProductUnitSection" class="container">
         <div class="row">

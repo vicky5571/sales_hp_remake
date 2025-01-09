@@ -54,6 +54,13 @@
   align-items: center;
 }
 
+.navbar-wrapper a.active {
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  pointer-events: none; /* Optional: Disable clicking on the active link */
+}
+
 .navbar-wrapper a:hover {
   background-color: white;
   color: rgb(0, 12, 34);

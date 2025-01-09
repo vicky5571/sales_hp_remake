@@ -48,7 +48,9 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 </head>
 
 <body>
+
     <?php include 'navbar/navbar.php'; ?>
+
     <div class="container my-4">
         <h1 class="text-center">All Transactions</h1>
         <a href="index.php" class="btn btn-primary mb-3">Home</a>

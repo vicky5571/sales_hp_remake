@@ -82,12 +82,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             new bootstrap.Modal(document.getElementById('editCategoryModal')).show();
         }
     </script>
+
+    <!-- Navbar -->
+    <link rel="stylesheet" href="navbar/navbarStyle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
+    <script src="navbar/navbarScript.js"></script>
 </head>
 
 <body>
+
+    <?php include 'navbar/navbar.php'; ?>
+
     <div class="container container-for-bg mt-5">
         <h1 class="text-center">Categories</h1>
-        <a href="index.php">Home</a>
         <div id="saveAlertPlaceholder"></div>
         <div id="deleteAlertPlaceholder"></div>
 
