@@ -121,7 +121,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <th rowspan="2">Buyer Name</th>
                             <th rowspan="2">First Name</th>
                             <th rowspan="2">Created At</th>
-                            <th colspan="7">Items</th>
+                            <th colspan="8">Items</th>
                         </tr>
                         <tr>
                             <th>Transaction Item ID</th>
@@ -131,6 +131,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <th>Buy Price</th>
                             <th>SRP</th>
                             <th>Date Stock In</th>
+                            <th>Supplier Name</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,16 +139,18 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <?php
                             // Fetch items for the current transaction
                             $transactionItemQuery = "SELECT 
-                                                        ti.transaction_item_id AS transaction_item_id,
-                                                        ti.sold_price AS sold_price,
-                                                        ti.imei AS imei,
-                                                        pu.buy_price AS buy_price,
-                                                        pu.srp AS srp,
-                                                        pu.product_unit_description AS product_unit_description,
-                                                        pu.date_stock_in AS date_stock_in
-                                                    FROM transaction_items ti
-                                                    JOIN product_unit pu ON ti.imei = pu.imei
-                                                    WHERE ti.cart_id = ?";
+        ti.transaction_item_id AS transaction_item_id,
+        ti.sold_price AS sold_price,
+        ti.imei AS imei,
+        pu.buy_price AS buy_price,
+        pu.srp AS srp,
+        pu.product_unit_description AS product_unit_description,
+        pu.date_stock_in AS date_stock_in,
+        s.supplier_name AS supplier_name
+    FROM transaction_items ti
+    JOIN product_unit pu ON ti.imei = pu.imei
+    JOIN suppliers s ON pu.supplier_id = s.supplier_id
+    WHERE ti.cart_id = ?";
                             $itemStmt = $conn->prepare($transactionItemQuery);
                             $itemStmt->bind_param("i", $transaction['cart_id']);
                             $itemStmt->execute();
@@ -164,6 +167,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['buyer_name']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['first_name']); ?></td>
                                 <td rowspan="<?= $itemCount ?: 1; ?>"><?= htmlspecialchars($transaction['created_at']); ?></td>
+
                                 <?php if (!empty($transactionItems)): ?>
                                     <td><?= htmlspecialchars($transactionItems[0]['transaction_item_id']); ?></td>
                                     <td><?= htmlspecialchars($transactionItems[0]['sold_price']); ?></td>
@@ -172,6 +176,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                                     <td><?= htmlspecialchars($transactionItems[0]['buy_price']); ?></td>
                                     <td><?= htmlspecialchars($transactionItems[0]['srp']); ?></td>
                                     <td><?= htmlspecialchars($transactionItems[0]['date_stock_in']); ?></td>
+                                    <td><?= htmlspecialchars($transactionItems[0]['supplier_name']); ?></td>
                                 <?php else: ?>
                                     <td colspan="8" class="text-center">No items found</td>
                                 <?php endif; ?>
@@ -186,6 +191,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                                         <td><?= htmlspecialchars($transactionItems[$i]['buy_price']); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['srp']); ?></td>
                                         <td><?= htmlspecialchars($transactionItems[$i]['date_stock_in']); ?></td>
+                                        <td><?= htmlspecialchars($transactionItems[$i]['supplier_name']); ?></td>
                                     </tr>
                                 <?php endfor; ?>
                             <?php endif; ?>
