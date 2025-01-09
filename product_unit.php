@@ -148,8 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
                             <td><?= htmlspecialchars($productUnit['IMEI']); ?></td>
                             <td><?= htmlspecialchars($productUnit['PRODUCT_NAME']); ?> - <?= htmlspecialchars($productUnit['COLOR']); ?></td>
                             <td><?= htmlspecialchars($productUnit['SUPPLIER_NAME']); ?></td>
-                            <td><?= htmlspecialchars($productUnit['BUY_PRICE']); ?></td>
-                            <td><?= htmlspecialchars($productUnit['SRP']); ?></td>
+                            <td><?= number_format($productUnit['BUY_PRICE'], 2, '.', ','); ?></td>
+                            <td><?= number_format($productUnit['SRP'], 2, '.', ','); ?></td>
                             <td><?= htmlspecialchars($productUnit['PRODUCT_UNIT_DESCRIPTION']); ?></td>
                             <td><?= htmlspecialchars($productUnit['DATE_STOCK_IN']); ?></td>
 

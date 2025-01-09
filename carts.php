@@ -22,7 +22,7 @@ $totalPrice = 0;
 $cartItems = [];
 while ($item = $cartItemsResult->fetch_assoc()) {
     $cartItems[] = $item;
-    $totalPrice += $item['SRP'];
+    $totalPrice += $item['sold_price'];
 }
 
 // Update quantity dynamically
@@ -113,9 +113,9 @@ $conn->query($updateQuantityQuery);
                         <tr>
                             <td><?= $item['IMEI'] ?></td>
                             <td><?= $item['PRODUCT_UNIT_DESCRIPTION'] ?></td>
-                            <td><?= $item['BUY_PRICE'] ?></td>
-                            <td><?= $item['SRP'] ?></td>
-                            <td><?= $item['sold_price']; ?></td>
+                            <td><?= number_format($item['BUY_PRICE'], 2, '.', ','); ?></td>
+                            <td><?= number_format($item['SRP'], 2, '.', ','); ?></td>
+                            <td><?= number_format($item['sold_price'], 2, '.', ','); ?></td>
                             <td>
                                 <button class="btn btn-danger" onclick="confirmRemove(<?= $item['cart_item_id'] ?>)">Remove</button>
                             </td>
@@ -125,8 +125,8 @@ $conn->query($updateQuantityQuery);
             </table>
         </div>
         <div class="summary-container">
-            <p>Total Items : Rp<?= count($cartItems) ?></p>
-            <p>Total Price : Rp<?= $totalPrice ?></p>
+            <p>Total Items : <?= count($cartItems) ?></p>
+            <p>Total Price: Rp<?= number_format($totalPrice, 2, ',', '.') ?></p>
             <button class="btn btn-success" onclick="confirmCheckout()">Checkout</button>
         </div>
 
