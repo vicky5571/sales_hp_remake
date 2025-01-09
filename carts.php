@@ -152,24 +152,49 @@ $conn->query($updateQuantityQuery);
             </div>
         </div>
 
-        <!-- Checkout Confirmation Modal -->
-        <div class="modal" id="checkoutModal" tabindex="-1">
+        <!-- Checkout Form Modal -->
+        <div class="modal" id="checkoutFormModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Checkout</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to checkout?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="checkout.php" class="btn btn-success">Yes, Checkout</a>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
+                    <form method="POST" action="checkout.php">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Checkout</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="transactionStatus" class="form-label">Transaction Status</label>
+                                <select name="transaction_status" id="transactionStatus" class="form-select">
+                                    <option value="done" selected>Done</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="on the way">On the Way</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="shippingAddress" class="form-label">Shipping Address</label>
+                                <input type="text" name="shipping_address" id="shippingAddress" class="form-control" value="in store">
+                            </div>
+                            <div class="mb-3">
+                                <label for="totalUnit" class="form-label">Total Unit</label>
+                                <input type="number" name="total_unit" id="totalUnit" class="form-control" value="<?= count($cartItems) ?>" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="buyerName" class="form-label">Buyer Name</label>
+                                <input type="text" name="buyer_name" id="buyerName" class="form-control" placeholder="Enter buyer name" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Confirm Checkout</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+
+
+
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
@@ -179,8 +204,9 @@ $conn->query($updateQuantityQuery);
                 modal.show();
             }
 
+
             function confirmCheckout() {
-                const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                const modal = new bootstrap.Modal(document.getElementById('checkoutFormModal'));
                 modal.show();
             }
         </script>
