@@ -64,6 +64,21 @@ foreach ($cartItems as $item) {
     $stmt->prepare($deleteCartQuery);
     $stmt->bind_param("i", $item['cart_item_id']);
     $stmt->execute();
+
+    // New query to update quantity in the products table
+    $updateProductQuantityQuery = "
+        UPDATE products p
+        JOIN product_unit pu ON p.product_id = pu.product_id
+        SET p.quantity = p.quantity - 1
+        WHERE pu.imei = ?";
+    $stmt->prepare($updateProductQuantityQuery);
+    $stmt->bind_param("s", $item['imei']);
+    $stmt->execute();
+
+    $deleteCartQuery = "DELETE FROM cart_items WHERE cart_item_id = ?";
+    $stmt->prepare($deleteCartQuery);
+    $stmt->bind_param("i", $item['cart_item_id']);
+    $stmt->execute();
 }
 
 // Clear cart quantity

@@ -18,7 +18,8 @@ $productUnitsQuery = "SELECT pu.IMEI, p.PRODUCT_NAME,p.COLOR , s.SUPPLIER_NAME, 
                       pu.PRODUCT_UNIT_DESCRIPTION, pu.DATE_STOCK_IN, pu.ADDED_TO_CART, pu.SOLD 
                       FROM PRODUCT_UNIT pu
                       JOIN PRODUCTS p ON pu.PRODUCT_ID = p.PRODUCT_ID
-                      JOIN SUPPLIERS s ON pu.SUPPLIER_ID = s.SUPPLIER_ID";
+                      JOIN SUPPLIERS s ON pu.SUPPLIER_ID = s.SUPPLIER_ID
+                      ORDER BY pu.DATE_STOCK_IN DESC";
 $productUnitsResult = $conn->query($productUnitsQuery);
 
 // Handle form edit

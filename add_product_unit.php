@@ -31,6 +31,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("siidds", $imei, $product_id, $supplier_id, $buy_price, $srp, $description);
 
     if ($stmt->execute()) {
+        // Update quantity in the products table
+        $updateQuery = "UPDATE products SET quantity = quantity + 1 WHERE product_id = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bind_param("i", $product_id);
+
+
+
+        if ($updateStmt->execute()) {
+            echo "<script>
+                alert('Product unit added successfully!');
+                window.location.href = 'product_unit.php';
+            </script>";
+        } else {
+            echo "Product unit added, but failed to update quantity: " . $conn->error;
+        }
+    } else {
+        // echo "Failed to add product unit: " . $conn->error;
+        echo "<script>
+            alert('Failed to add product unit. Please try again.');
+            window.history.back();
+        </script>" . $conn->error;;
+    }
+
+    if ($stmt->execute()) {
         echo "<script>
             alert('Product unit added successfully!');
             window.location.href = 'product_unit.php';
