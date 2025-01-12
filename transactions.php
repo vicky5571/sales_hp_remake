@@ -68,17 +68,28 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     <title>All Transactions</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function printPage() {
-            window.print();
-        }
-    </script>
 
     <link rel="stylesheet" href="./src/style.css">
     <link rel="stylesheet" href="navbar/navbarStyle.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
     <script src="navbar/navbarScript.js"></script>
+    <style>
+        @media print {
+            body * {
+                display: none;
+            }
+
+            .container-for-bg,
+            .container-for-bg * {
+                display: revert;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -99,10 +110,11 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     <input type="date" id="end_date" name="end_date" class="form-control" value="<?= htmlspecialchars($endDate); ?>" required>
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    <button type="submit" class="btn btn-primary w-100 no-print">Filter</button>
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
-                    <button class="btn btn-success w-100" onclick="printPage()">Print</button>
+                    <button class="btn btn-success w-100 no-print" id="print" type="button">Print</button>
+                    <!-- onclick="printPage()" -->
                 </div>
             </div>
         </form>
@@ -119,7 +131,7 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <th rowspan="2">Total Units</th>
                             <th rowspan="2">Grand Total</th>
                             <th rowspan="2">Buyer Name</th>
-                            <th rowspan="2">First Name</th>
+                            <th rowspan="2">Kasir </th>
                             <th rowspan="2">Created At</th>
                             <th colspan="9">Items</th>
                         </tr>
@@ -253,6 +265,15 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             const modal = new bootstrap.Modal(document.getElementById('statusModal'));
             modal.show();
         }
+    </script>
+
+    <script>
+        // Print
+        const printBtn = document.getElementById('print');
+
+        printBtn.addEventListener('click', function() {
+            window.print();
+        })
     </script>
 
 </body>

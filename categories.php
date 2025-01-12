@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <td><?= $row['CATEGORY_NAME']; ?></td>
                             <td>
                                 <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $row['CATEGORY_ID']; ?>, '<?= htmlspecialchars($row['CATEGORY_NAME']); ?>')">Edit</button>
-                                <a href="delete_categories.php?id=<?= $row['CATEGORY_ID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
+                                <!-- <a href="delete_categories.php?id=<?= $row['CATEGORY_ID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a> -->
                             </td>
                         </tr>
                     <?php endwhile; ?>

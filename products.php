@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td><?= $product['QUANTITY']; ?></td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?= $product['PRODUCT_ID']; ?>">Edit</button>
-                                    <a href="delete_products.php?id=<?= $product['PRODUCT_ID']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                                    <!-- <a href="delete_products.php?id=<?= $product['PRODUCT_ID']; ?>" class="btn btn-danger btn-sm">Delete</a> -->
                                 </td>
                             </tr>
                             <!-- Edit Modal -->

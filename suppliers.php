@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="mb-3 col-md-4">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone" id="phone" required>
+                        <input type="number" class="form-control" name="phone" id="phone" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Add Supplier</button>

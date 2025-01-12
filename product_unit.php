@@ -98,7 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
                                 <select name="product_id" id="product_id" class="form-select" required>
                                     <option value="">-- Select Product --</option>
                                     <?php while ($product = $productsResult->fetch_assoc()) : ?>
-                                        <option value="<?= $product['PRODUCT_ID']; ?>"><?= $product['PRODUCT_NAME'];  ?> <?= $product['COLOR'];  ?> (Quantity: <?= $product['QUANTITY']; ?>)</option>
+                                        <option value="<?= $product['PRODUCT_ID']; ?>"><?= $product['PRODUCT_NAME'];  ?> <?= $product['COLOR'];  ?> </option>
+                                        <!-- (Quantity: <?= $product['QUANTITY']; ?>) -->
                                     <?php endwhile; ?>
                                 </select>
                             </div>
