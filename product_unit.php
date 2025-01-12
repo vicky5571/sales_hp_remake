@@ -19,6 +19,7 @@ $productUnitsQuery = "SELECT pu.IMEI, p.PRODUCT_NAME,p.COLOR , s.SUPPLIER_NAME, 
                       FROM PRODUCT_UNIT pu
                       JOIN PRODUCTS p ON pu.PRODUCT_ID = p.PRODUCT_ID
                       JOIN SUPPLIERS s ON pu.SUPPLIER_ID = s.SUPPLIER_ID
+                      WHERE pu.IS_DELETED != 1
                       ORDER BY pu.DATE_STOCK_IN DESC";
 $productUnitsResult = $conn->query($productUnitsQuery);
 
@@ -72,13 +73,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
     <script src="navbar/navbarScript.js"></script>
+
+    <style>
+        @media print {
+            body * {
+                display: none;
+            }
+
+            .container-for-bg,
+            .container-for-bg * {
+                display: revert;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
     <?php include 'navbar/navbar.php'; ?>
     <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
-        <div id="addProductUnitSection" class="container mt-3">
+        <div id="addProductUnitSection" class="container mt-3 no-print">
             <div class="row">
                 <div class="col-12 mb-3" style="position: sticky; top: 0; z-index: 1000;">
                     <h2>Add Product Unit</h2>
@@ -125,6 +143,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
 
                         <button type="submit" name="add_product_unit" class="btn btn-primary">Add Product Unit</button>
                     </form>
+                    <div class="col-2 no-print w-200 mt-3">
+                        <button class="btn btn-success no-print" id="print" type="button">Print</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -278,6 +299,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product_unit'])
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Print
+        const printBtn = document.getElementById('print');
+
+        printBtn.addEventListener('click', function() {
+            window.print();
+        })
+    </script>
 </body>
 
 </html>
