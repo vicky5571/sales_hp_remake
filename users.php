@@ -50,6 +50,22 @@ $result = $conn->query($query);
             color: #fff;
         }
     </style>
+    <style>
+        @media print {
+            body * {
+                display: none;
+            }
+
+            .container-for-bg,
+            .container-for-bg * {
+                display: revert;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -59,7 +75,10 @@ $result = $conn->query($query);
     <div class="container container-for-bg rounded p-4">
         <div class="mb-4">
             <h1 class="text-center">Users Management</h1>
-            <a href="add_user.php" class="btn btn-primary">Add User</a>
+            <a href="add_user.php" class="btn btn-primary no-print">Add User</a>
+
+            <button class="btn btn-success no-print" id="print" type="button">Print</button>
+
         </div>
 
         <!-- Users Table -->
@@ -152,6 +171,7 @@ $result = $conn->query($query);
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -188,6 +208,15 @@ $result = $conn->query($query);
             document.getElementById('delete_user_id').value = userId;
             new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
+    </script>
+
+    <script>
+        // Print
+        const printBtn = document.getElementById('print');
+
+        printBtn.addEventListener('click', function() {
+            window.print();
+        })
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

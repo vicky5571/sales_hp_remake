@@ -17,7 +17,8 @@ $userRole = $_SESSION['user_role'] ?? '';
 // Fetch products from the database
 $productsQuery = "SELECT p.PRODUCT_ID, p.PRODUCT_NAME, p.COLOR, p.QUANTITY, p.CATEGORY_ID, c.CATEGORY_NAME 
                   FROM PRODUCTS p 
-                  JOIN CATEGORIES c ON p.CATEGORY_ID = c.CATEGORY_ID";
+                  JOIN CATEGORIES c ON p.CATEGORY_ID = c.CATEGORY_ID
+                  WHERE p.IS_DELETED != 1";
 $productsResult = $conn->query($productsQuery);
 
 // Fetch categories for the dropdown
@@ -57,6 +58,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
     <script src="navbar/navbarScript.js"></script>
+
+    <style>
+        @media print {
+            body * {
+                display: none;
+            }
+
+            .container-for-bg,
+            .container-for-bg * {
+                display: revert;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -66,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
         <div class="row">
             <!-- Add Product Section -->
-            <div class="col-12 mb-3 rounded p-3" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border: 1px solid #dee2e6;">
+            <div class="col-12 mb-3 rounded p-3 no-print" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border: 1px solid #dee2e6;">
                 <h2>Add Product</h2>
                 <form method="POST" action="" class="row g-3">
                     <div class="col-md-3">
@@ -94,6 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <button type="submit" class="btn btn-primary">Add Product</button>
                     </div>
                 </form>
+                <div class="col-1 no-print mt-3">
+                    <button class="btn btn-success no-print" id="print" type="button">Print</button>
+                </div>
             </div>
 
             <!-- Products Table -->
@@ -120,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td><?= $product['QUANTITY']; ?></td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?= $product['PRODUCT_ID']; ?>">Edit</button>
-                                    <!-- <a href="delete_products.php?id=<?= $product['PRODUCT_ID']; ?>" class="btn btn-danger btn-sm">Delete</a> -->
+                                    <a href="delete_products.php?id=<?= $product['PRODUCT_ID']; ?>" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                             <!-- Edit Modal -->
@@ -174,6 +195,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Print
+        const printBtn = document.getElementById('print');
+
+        printBtn.addEventListener('click', function() {
+            window.print();
+        })
+    </script>
 </body>
 
 </html>

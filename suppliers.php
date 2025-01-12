@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch suppliers from the database
-$suppliersQuery = "SELECT * FROM SUPPLIERS";
+$suppliersQuery = "SELECT * FROM SUPPLIERS WHERE IS_DELETED != 1";
 $suppliersResult = $conn->query($suppliersQuery);
 
 // Handle form submission
@@ -43,6 +43,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
     <script src="navbar/navbarScript.js"></script>
+
+    <style>
+        @media print {
+            body * {
+                display: none;
+            }
+
+            .container-for-bg,
+            .container-for-bg * {
+                display: revert;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -52,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container container-for-bg rounded border border-primary" style="margin-top: 13vh">
 
         <!-- Add Supplier Form -->
-        <div class="col-12 mb-3 rounded p-3" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border: 1px solid #dee2e6;">
+        <div class="col-12 mb-3 rounded p-3 no-print" style="position: sticky; top: 0; z-index: 1000; background: #f8f9fa; border: 1px solid #dee2e6;">
             <h2>Add Supplier</h2>
             <form method="POST" action="">
                 <div class="row">
@@ -69,8 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="number" class="form-control" name="phone" id="phone" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Add Supplier</button>
+                <button type="submit" class="btn btn-primary">Add Supplier</button>
             </form>
+            <div class="col-2 no-print w-200 mt-3">
+                <button class="btn btn-success no-print" id="print" type="button">Print</button>
+            </div>
         </div>
 
         <!-- Display Suppliers Table -->
@@ -158,6 +178,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('editEmail').value = email;
             document.getElementById('editPhone').value = phone;
         });
+    </script>
+
+    <script>
+        // Print
+        const printBtn = document.getElementById('print');
+
+        printBtn.addEventListener('click', function() {
+            window.print();
+        })
     </script>
 </body>
 

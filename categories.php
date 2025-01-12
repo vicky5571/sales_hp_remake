@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch categories from the database
-$query = "SELECT * FROM CATEGORIES";
+$query = "SELECT * FROM CATEGORIES WHERE IS_DELETED != 1";
 $result = mysqli_query($conn, $query);
 
 // Handle form submission to add a new category
@@ -88,6 +88,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://kit.fontawesome.com/7103fc097b.js" crossorigin="anonymous"></script>
     <script src="navbar/navbarScript.js"></script>
+
+    <style>
+        @media print {
+            body * {
+                display: none;
+            }
+
+            .container-for-bg,
+            .container-for-bg * {
+                display: revert;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -100,11 +117,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div id="deleteAlertPlaceholder"></div>
 
         <div class="table-responsive mt-4 bg-light" style="max-height: 400px; overflow-y: auto;">
-            <!-- Add New Category Form -->
-            <form method="POST" class="d-flex mb-4">
-                <input type="text" name="category_name" class="form-control me-2" placeholder="Enter Category Name" required>
-                <button type="submit" class="btn btn-success">Add</button>
-            </form>
+            <div class="row no-print">
+                <!-- Add New Category Form -->
+                <form method="POST" class="d-flex mb-2  no-print">
+                    <input type="text" name="category_name" class="form-control me-2" placeholder="Enter Category Name" required>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </form>
+                <div class="col-md-1 mb-2 d-flex align-items-end no-print">
+                    <button class="btn btn-success w-100 no-print" id="print" type="button">Print</button>
+                </div>
+
+            </div>
+
 
             <!-- Categories Table -->
             <table class="table table-striped table-bordered">
@@ -122,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <td><?= $row['CATEGORY_NAME']; ?></td>
                             <td>
                                 <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $row['CATEGORY_ID']; ?>, '<?= htmlspecialchars($row['CATEGORY_NAME']); ?>')">Edit</button>
-                                <!-- <a href="delete_categories.php?id=<?= $row['CATEGORY_ID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a> -->
+                                <a href="delete_categories.php?id=<?= $row['CATEGORY_ID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -176,6 +200,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             })
         }
     </script> -->
+    <script>
+        // Print
+        const printBtn = document.getElementById('print');
+
+        printBtn.addEventListener('click', function() {
+            window.print();
+        })
+    </script>
 </body>
 
 </html>
