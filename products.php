@@ -22,7 +22,7 @@ $productsQuery = "SELECT p.PRODUCT_ID, p.PRODUCT_NAME, p.COLOR, p.QUANTITY, p.CA
 $productsResult = $conn->query($productsQuery);
 
 // Fetch categories for the dropdown
-$categoriesQuery = "SELECT * FROM CATEGORIES";
+$categoriesQuery = "SELECT * FROM CATEGORIES WHERE IS_DELETED != 1";
 $categoriesResult = $conn->query($categoriesQuery);
 
 // Handle form submission for adding products

@@ -7,10 +7,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch data for dropdowns
-$productsQuery = "SELECT PRODUCT_ID, PRODUCT_NAME, COLOR, QUANTITY FROM PRODUCTS";
+$productsQuery = "SELECT PRODUCT_ID, PRODUCT_NAME, COLOR, QUANTITY FROM PRODUCTS WHERE IS_DELETED != 1";
 $productsResult = $conn->query($productsQuery);
 
-$suppliersQuery = "SELECT SUPPLIER_ID, SUPPLIER_NAME FROM SUPPLIERS";
+$suppliersQuery = "SELECT SUPPLIER_ID, SUPPLIER_NAME FROM SUPPLIERS WHERE IS_DELETED != 1";
 $suppliersResult = $conn->query($suppliersQuery);
 
 // Fetch product units
