@@ -115,7 +115,10 @@ $conn->query($updateQuantityQuery);
                             <td><?= $item['PRODUCT_UNIT_DESCRIPTION'] ?></td>
                             <td><?= number_format($item['BUY_PRICE'], 2, '.', ','); ?></td>
                             <td><?= number_format($item['SRP'], 2, '.', ','); ?></td>
-                            <td><?= number_format($item['sold_price'], 2, '.', ','); ?></td>
+                            <td contenteditable="true" onblur="updateSoldPrice(this, <?= $item['cart_item_id'] ?>)">
+                                <?= number_format($item['sold_price'], 2, '.', ','); ?>
+                            </td>
+
                             <td>
                                 <button class="btn btn-danger" onclick="confirmRemove(<?= $item['cart_item_id'] ?>)">Remove</button>
                             </td>
@@ -210,6 +213,54 @@ $conn->query($updateQuantityQuery);
                 modal.show();
             }
         </script>
+
+        <script>
+            function updateSoldPrice(element, cartItemId) {
+                const newPrice = parseFloat(element.textContent.replace(/,/g, ''));
+                if (isNaN(newPrice) || newPrice < 0) {
+                    alert('Please enter a valid price.');
+                    return;
+                }
+
+                // Make an AJAX request to update the sold price
+                fetch('update_sold_price.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            cart_item_id: cartItemId,
+                            sold_price: newPrice
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Sold price updated successfully.');
+                            updateTotalPrice();
+                        } else {
+                            alert('Failed to update sold price: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while updating the sold price.');
+                    });
+            }
+
+            function updateTotalPrice() {
+                let total = 0;
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    const priceCell = row.querySelector('td:nth-child(5)'); // Assuming Sold Price is the 5th column
+                    const price = parseFloat(priceCell.textContent.replace(/,/g, '')) || 0;
+                    total += price;
+                });
+
+                // Update the total price in the summary container
+                document.querySelector('.summary-container p:nth-child(2)').textContent = `Total Price: Rp${total.toLocaleString('id-ID', { minimumFractionDigits: 2 })}`;
+            }
+        </script>
+
 </body>
 
 </html>
